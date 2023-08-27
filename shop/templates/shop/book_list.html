@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+{% block content %}
+{#    <label>#}
+{#        <select class="filter" name="filter">#}
+{#            {% for book in book_list %}#}
+{#                <option value="{{book}}">{{book.price}}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#    </label>#}
+    <fieldset>
+    <h1>List of Books:</h1>
+    </fieldset>
+{% if object_list %}
+
+
+{#    <ol>#}
+{#        {% for book in object_list %}#}
+{#            <li>#}
+{#                <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">#}
+{#                    <div class="col">#}
+{#                        <div class="card mb-4 rounded-3 shadow-sm">#}
+{#                            <div class="card-header py-3">#}
+{#                                <h4 class="my-0 fw-normal"><a href="{% url "shop:book-detail" book.id %}">{{ book.title }}</a></h4>#}
+{#                            </div>#}
+{##}
+{#                            <div class="card-body">#}
+{#                                <h1 class="card-title pricing-card-title">$5<small class="text-body-secondary fw-light"></small></h1>#}
+{#                                <ul class="list-unstyled mt-3 mb-4">#}
+{#                                    <li>10 users included</li>#}
+{#                                    <li>2 GB of storage</li>#}
+{#                                    <li>Email support</li>#}
+{#                                    <li>Help center access</li>#}
+{#                                </ul>#}
+{##}
+{#                                <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
+{#                                <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">#}
+{#                                    <div class="modal-dialog">#}
+{#                                        <div class="modal-content">#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </li>#}
+
+
+
+
+
+
+
+            <div class="row">
+		{% for book in object_list %}
+		<div class="col-lg-3">
+			<div class="box-element product">
+                <div class="card mb-4 rounded-2 shadow-sm">
+                    <div class="card-header py-3">
+                        <h2>{{ book.title }}</h2>
+                    </div>
+
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <img class="thumbnail" src="{% static "images/book1.jpg" %}">
+                        </ul>
+
+{#                        <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
+{#                        <button type="button" class="w-100 btn btn-lg btn-outline-primary" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
+                        <input type="button" class="w-100 btn btn-lg btn-outline-primary" onclick="location.href='{% url "shop:cart" %}';" value="Add to Cart" />
+                        <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<hr>
+
+				<a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk %}">View</a>
+
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+
+{% else %}
+    <p>No books are available</p>
+{% endif %}
+{% endblock content %}
+
+</body>
+</html>
