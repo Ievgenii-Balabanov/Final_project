@@ -12,6 +12,11 @@ urlpatterns = [
     path("login/", views.LoginFormView.as_view(), name="login"),
     path("book/", views.BookListView.as_view(), name="book-list"),
     path("book/<int:pk>", views.BookInstanceDetailView.as_view(), name="book-detail"),
-    path("cart/", views.cart, name="cart"),
+    # path("cart/", views.cart, name="cart"),
     path('checkout/', views.checkout, name="checkout"),
+
+    path('cart/', views.cart, name="cart"),
+    path('checkout/', views.checkout, name="checkout"),
+    path('update_item/', views.updateItem, name="update_item"),
+    path('process_order/', views.processOrder, name="process_order"),
 ]

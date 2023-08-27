@@ -6,6 +6,7 @@ from shop import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('cart/', include("Cart.urls", namespace='cart')),
     path("", include("shop.urls")),
 ]
 

@@ -62,6 +62,11 @@ class OrderItem(models.Model):
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
+    @property
+    def get_total(self):
+        total = self.book_id.price * self.quantity
+        return total
+
 
 class Cart(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)

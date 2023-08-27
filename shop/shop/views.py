@@ -1,17 +1,20 @@
+import datetime
+import json
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
 
 from shop.forms import RegisterForm
-from shop.models import Book, Cart, Order
-from shop.utils import cartData
+from shop.models import Book, Cart, Order, OrderItem
+from shop.utils import cartData, guestOrder
 
 
 # def index(request):
@@ -86,7 +89,7 @@ def cart(request):
     items = data['items']
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'store/cart.html', context)
+    return render(request, 'shop/cart.html', context)
 
 
 def checkout(request):
@@ -97,7 +100,7 @@ def checkout(request):
     items = data['items']
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'store/checkout.html', context)
+    return render(request, 'shop/checkout.html', context)
 
 
 def updateItem(request):
@@ -108,7 +111,7 @@ def updateItem(request):
     print('Product:', productId)
 
     customer = request.user.customer
-    product = Product.objects.get(id=productId)
+    product = Book.objects.get(id=productId)
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
     orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
@@ -143,14 +146,31 @@ def processOrder(request):
         order.complete = True
     order.save()
 
-    if order.shipping == True:
-        ShippingAddress.objects.create(
-            customer=customer,
-            order=order,
-            address=data['shipping']['address'],
-            city=data['shipping']['city'],
-            state=data['shipping']['state'],
-            zipcode=data['shipping']['zipcode'],
-        )
+    # if order.shipping == True:
+    #     ShippingAddress.objects.create(
+    #         customer=customer,
+    #         order=order,
+    #         address=data['shipping']['address'],
+    #         city=data['shipping']['city'],
+    #         state=data['shipping']['state'],
+    #         zipcode=data['shipping']['zipcode'],
+    #     )
 
     return JsonResponse('Payment submitted..', safe=False)
+
+
+def product_list(request):
+    # categories = Category.objects.all()
+    products = Book.objects.filter(available=True)
+    products = products.filter()
+    return render(request, 'shop/book_list.html',
+                  {
+                      # 'category': category,
+                      # 'categories': categories,
+                      'products': products
+                  })
+
+
+def product_detail(request, id):
+    product = get_object_or_404(Book, id=id, available=True)
+    return render(request, 'shop/book_list.html', {'product': product})

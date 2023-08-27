@@ -36,7 +36,7 @@
             <a class="nav-link active" aria-current="page" href="{% url "logout" %}">Logout</a>
           </li>
             {% endif %}
-        {% if request.user.is_authenticated %}
+        {% if not request.user.is_authenticated %}
             <li>
                 <a class="nav-link active" aria-current="page" href="{% url "shop:login" %}">Login</a>
             </li>
