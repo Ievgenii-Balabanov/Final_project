@@ -35,7 +35,7 @@
                         <li>Help center access</li>
                     </ul>
     {#              <button type="button" class="btn btn-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="">Contact Us</button>#}
-                    <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>
+                    <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "Cart:cart_detail" %}">Add to Cart</button>
                     <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -47,4 +47,25 @@
             </div>
         </div>
     </div>
+
+
+{% block title %}
+    {% if category %}{{ category.title }}{% else %}Products{% endif %}
+{% endblock %}
+    <div class="product-detail">
+{#        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">#}
+        <h1>{{ product.name }}</h1>
+        <h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
+        <p class="price">${{ product.price }}</p>
+        {{ product.description|linebreaks }}
+    </div>
+
+    <p class="price">${{ product.price }}</p>
+<form action="{% url "Cart:cart_add"  %}" method="post">
+    {{ cart_product_form }}
+    {% csrf_token %}
+    <input type="submit" value="Add to cart">
+</form>
+
+
 {% endblock content %}
