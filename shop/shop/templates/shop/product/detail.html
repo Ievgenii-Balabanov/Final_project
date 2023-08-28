@@ -13,7 +13,8 @@
     </div>
 
 <p class="price">${{ product.price }}</p>
-<form action="{% url "Cart:cart_add" product.pk %}" method="post">
+{#<form action="{% url "Cart:cart_add" product.pk %}" method="post">#}
+<form action="{% url 'Cart:cart_add' product.pk %}" method="post">
     {{ cart_product_form }}
     {% csrf_token %}
     <input type="submit" value="Add to cart">

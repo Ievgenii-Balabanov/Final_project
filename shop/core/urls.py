@@ -23,3 +23,9 @@ urlpatterns = [
     path("cart/", include('Cart.urls', namespace='Cart')),
     path("", include('shop.urls', namespace='shop')),
 ]
+
+urlpatterns += [
+    path("accounts/", include("django.contrib.auth.urls")),
+    # path("accounts/profile/", views.UserProfile.as_view(), name="profile"),
+    # path("accounts/update_profile/", views.UpdateProfileView.as_view(), name="update_profile"),
+]
