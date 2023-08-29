@@ -99,5 +99,5 @@ def product_list(request, category_slug=None):
 #                                 slug=slug,
 #                                 available=True)
 #     cart_product_form = CartAddProductForm()
-#     return render(request, 'shop/product/detail.html', {'product': product,
+#     return render(request, 'shop/product/details.html', {'product': product,
 #                                                         'cart_product_form': cart_product_form})
