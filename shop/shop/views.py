@@ -1,5 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
@@ -7,11 +8,7 @@ from django.views.generic.edit import FormMixin
 
 from Cart.cart import Cart
 from .forms import RegisterForm, ParForm, OrderCreateForm
-from .models import Category, Product, OrderItem
-
-
-# from shop.forms import CartAddProductForm
-# from .utils import cartData
+from .models import Category, Product, OrderItem, Order
 
 
 def index(request):
@@ -71,17 +68,6 @@ class BookInstanceDetailView(generic.DetailView):
         return context
 
 
-def checkout(request):
-    # data = cartData(request)
-
-    # cartItems = data['cartItems']
-    # order = data['order']
-    # items = data['items']
-
-    # context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'shop/checkout.html')
-
-
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
@@ -99,17 +85,21 @@ def product_list(request, category_slug=None):
 def order_create(request):
     cart = Cart(request)
     if request.POST:
-        form = OrderCreateForm(request.POST)
-        if form.is_valid():
-            order = form.save()
-            for item in cart:
-                OrderItem.objects.create(order=order,
-                                         book=item["product"],
-                                         price=item['price'],
-                                         quantity=item['quantity'])
-                cart.clear()
-                return render(request, 'shop/orders/order/created.html', {'order': order})
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        delivery_address = request.POST.get("delivery_address")
+        postal_code = request.POST.get("postal_code")
+        city = request.POST.get("city")
+        order = Order.objects.create(first_name=first_name, last_name=last_name, email=email,
+                                     delivery_address=delivery_address,postal_code=postal_code, city=city)
+        order.save()
+
+        for item in cart:
+            OrderItem.objects.create(order=order, book=item["product"], price=item['price'], quantity=item['quantity'])
+            cart.clear()
+            return render(request, 'shop/orders/order/created.html',
+                          {'order': order})
     else:
-        form = OrderCreateForm
-    return render(request, 'shop/orders/order/create.html',
-                  {'cart': cart, 'form': form})
+        return render(request, "shop/orders/order/create.html", {'cart': cart})
+    return render(request, "shop/orders/order/create.html", {'cart': cart, 'order': order})

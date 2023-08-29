@@ -1,78 +1,83 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
 
 {% block title %}Checkout{% endblock %}
 
 {% block content %}
     <h1>Checkout</h1>
-    <div class="order-info">
-        <h3>Your order</h3>
-        <ul>
-            {% for item in cart %}
-                <li>
-                    {{ item.quantity }}x {{ item.product.name }}
-                    <span>${{ item.total_price }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-        <p>Total: ${{ cart.get_total_price }}</p>
+    <br>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card mb-4 rounded-2 shadow-sm">
+                <div class="card-header py-3">
+                    <h2>Your order</h2>
+                </div>
+
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">${{ cart.get_total_price }}<small class="text-body-secondary fw-light"></small></h1>
+                    <br>
+                    <h3>Your order</h3>
+                    <ul>
+                        {% for item in cart %}
+                            <li>
+                                {{ item.quantity }}x {{ item.product.name }}
+                                <span>${{ item.total_price }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+
+                    <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+
+        <form action="{% url 'shop:order-create' %}" method="POST" class="row g-3">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-3">
+                    <label class="form-label">First name</label>
+                    <input type="text" name="first_name" class="form-control" placeholder="John" aria-label="First name">
+                </div>
+
+                <div class="col-lg-3">
+                    <label class="form-label">Last name</label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Doe" aria-label="Last name">
+                </div>
+                <p>
+
+                <div class="col-lg-6">
+                    <label for="inputAddress" class="form-label">Delivery Address</label>
+                    <input type="text" name="delivery_address" class="form-control" id="inputAddress" placeholder="9 Khmelnytskogo St">
+                </div>
+                <p>
+
+                <div class="col-lg-3">
+                    <label for="inputEmail4" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="inputEmail4" placeholder="johndoe@example.com">
+                </div>
+
+
+                <div class="col-lg-3">
+                    <label for="inputCity" class="form-label">City</label>
+                    <input type="text" name="city"  class="form-control" id="inputCity" placeholder="Kharkiv">
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">Zip</label>
+                <input type="text" name="postal_code" class="form-control" id="inputZip">
+            </div>
+
+            <div class="col-12">
+                <p><input type="submit" class="btn btn-success" value="Confirm the order"></p>
+            </div>
+        </form>
     </div>
-    <div class="col-md-6">
-    <form action="." method="post" class="order-form">
-        {{ form.as_p }}
-        <p><input type="submit" value="Place order"></p>
-        {% csrf_token %}
-    </form>
-        </div>
-
-
-{#    <form action="." method="post" class="row g-3">#}
-{#        {% csrf_token %}#}
-{#  <div class="col-md-6">#}
-{#    <label for="inputEmail4" class="form-label">Email</label>#}
-{#    <input type="email" class="form-control" id="inputEmail4">#}
-{#  </div>#}
-{#  <div class="col-md-6">#}
-{#    <label for="inputPassword4" class="form-label">Password</label>#}
-{#    <input type="password" class="form-control" id="inputPassword4">#}
-{#  </div>#}
-{#  <div class="col-12">#}
-{#    <label for="inputAddress" class="form-label">Address</label>#}
-{#    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">#}
-{#  </div>#}
-{#  <div class="col-12">#}
-{#    <label for="inputAddress2" class="form-label">Address 2</label>#}
-{#    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">#}
-{#  </div>#}
-{#  <div class="col-md-6">#}
-{#    <label for="inputCity" class="form-label">City</label>#}
-{#    <input type="text" class="form-control" id="inputCity">#}
-{#  </div>#}
-{#  <div class="col-md-4">#}
-{#    <label for="inputState" class="form-label">State</label>#}
-{#    <select id="inputState" class="form-select">#}
-{#      <option selected>Choose...</option>#}
-{#      <option>...</option>#}
-{#    </select>#}
-{#  </div>#}
-{#  <div class="col-md-2">#}
-{#    <label for="inputZip" class="form-label">Zip</label>#}
-{#    <input type="text" class="form-control" id="inputZip">#}
-{#  </div>#}
-{#  <div class="col-12">#}
-{#      <div class="form-check form-switch">#}
-{#  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>#}
-{#  <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>#}
-{#</div>#}
-{#    <div class="form-check">#}
-{#      <input class="form-check-input" type="checkbox" id="gridCheck">#}
-{#      <label class="form-check-label" for="gridCheck">#}
-{#        Check me out#}
-{#      </label>#}
-{#    </div>#}
-{#  </div>#}
-{#  <div class="col-12">#}
-{#    <button type="submit" class="btn btn-primary">Sign in</button>#}
-{#  </div>#}
-{#</form>#}
 {% endblock %}
