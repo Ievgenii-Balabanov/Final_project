@@ -12,8 +12,11 @@
                     <a style="float: left; margin: 7px;" class="btn btn-outline-secondary" href="{% url "shop:book-list" %}">&#8678; Continue Shopping</a>
                 </th>
                 <th>
-                    <a style="float: right; margin: 7px;" class="btn btn-success" href="{% url "shop:checkout" %}">Proceed to Checkout &#8680;</a>
+                    <a style="float: right; margin: 7px;" class="btn btn-success" href="{% url "shop:order-create" %}">Proceed to Checkout &#8680;</a>
                 </th>
+{#                <a href="{% url "shop:order-create" %}" class="button">#}
+{#    Checkout#}
+{#</a>#}
                 <br>
                 <br>
             </div>

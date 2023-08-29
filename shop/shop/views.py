@@ -5,8 +5,11 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import FormMixin
 
-from .forms import RegisterForm, ParForm
-from .models import Category, Product
+from Cart.cart import Cart
+from .forms import RegisterForm, ParForm, OrderCreateForm
+from .models import Category, Product, OrderItem
+
+
 # from shop.forms import CartAddProductForm
 # from .utils import cartData
 
@@ -93,11 +96,20 @@ def product_list(request, category_slug=None):
                    'products': products})
 
 
-# def product_detail(request, id, slug):
-#     product = get_object_or_404(Product,
-#                                 id=id,
-#                                 slug=slug,
-#                                 available=True)
-#     cart_product_form = CartAddProductForm()
-#     return render(request, 'shop/product/details.html', {'product': product,
-#                                                         'cart_product_form': cart_product_form})
+def order_create(request):
+    cart = Cart(request)
+    if request.POST:
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(order=order,
+                                         book=item["product"],
+                                         price=item['price'],
+                                         quantity=item['quantity'])
+                cart.clear()
+                return render(request, 'shop/orders/order/created.html', {'order': order})
+    else:
+        form = OrderCreateForm
+    return render(request, 'shop/orders/order/create.html',
+                  {'cart': cart, 'form': form})

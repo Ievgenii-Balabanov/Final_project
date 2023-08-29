@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 
-from shop.models import User, Product
+from shop.models import User, Product, Order
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
 
@@ -41,3 +41,9 @@ class ParForm(forms.ModelForm):
     class Meta:
         model = Product  # Your Part model
         fields = ["quantity"]
+
+
+class OrderCreateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['first_name', 'last_name', 'email', 'delivery_address', 'postal_code', 'city']
