@@ -25,16 +25,10 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url "shop:index" %}"><img width="66%" src="{% static "images/Profile Icon.png" %}" alt="icon"></a>
-{#    <img  src="{% static "images/Profile Icon.png" %}" alt="icon">#}
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-
-{#<div id="content">#}
-{##}
-{##}
-{#</div>#}
 
       <div class="collapse navbar-collapse" id="navbarsExample02">
         <ul class="navbar-nav me-auto">
@@ -46,6 +40,10 @@
         {% if not request.user.is_authenticated %}
             <li>
                 <a class="nav-link active" aria-current="page" href="{% url "shop:login" %}">Login</a>
+            </li>
+            <li>
+            <a class="nav-link active" aria-current="page" href="{% url 'shop:register' %}">Sign Up</a>
+{#                <a href="{% url 'shop:register' %}">Register</a>#}
             </li>
         {% endif %}
         </ul>

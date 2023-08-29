@@ -31,14 +31,23 @@ class Category(models.Model):
         return reverse('shop:product_list_by_category', args=[self.slug])
 
 
+class Genre(models.Model):
+    name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     category = models.ForeignKey(Category,
                                  related_name='products',
                                  on_delete=models.CASCADE)
 
     name = models.CharField(max_length=150, db_index=True)
+    genre = models.ManyToManyField(Genre)
+    author = models.CharField(max_length=70)
     slug = models.CharField(max_length=150, db_index=True, unique=True)
-    image = models.ImageField(upload_to="media/images", blank=True)
+    image = models.ImageField(upload_to="images", blank=True)
     description = models.TextField(max_length=1000, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)

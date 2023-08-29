@@ -29,3 +29,8 @@ urlpatterns += [
     # path("accounts/profile/", views.UserProfile.as_view(), name="profile"),
     # path("accounts/update_profile/", views.UpdateProfileView.as_view(), name="update_profile"),
 ]
+
+urlpatterns += (
+        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # noqa: W503
+        + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # noqa: W503
+    )

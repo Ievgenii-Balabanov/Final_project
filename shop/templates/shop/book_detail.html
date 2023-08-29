@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-
-
 {% load static %}
 {% load widget_tweaks %}
 {#<p> {{ is_paginated }} </p>#}
@@ -14,12 +12,14 @@
                 </div>
 
                 <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
+                    <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
                     <ul class="list-unstyled mt-3 mb-4">
-                        <li>10 users included</li>
-                        <li>2 GB of storage</li>
-                        <li>Email support</li>
-                        <li>Help center access</li>
+                        <p class="card-text "><img src="{{ userpost.image.url }}" alt=""></p>
+                        <li><img width="50%" src="{{ book.image.url }}" alt=""></li>
+                        <div class="card-body">
+                        <li><strong>Description: </strong>{{ book.description }}</li>
+                        </div>
+                        <li><strong>Category: </strong>{{ book.category }}</li>
                     </ul>
 
                     <form method="post" action="{% url 'Cart:cart_add' book.pk %}">

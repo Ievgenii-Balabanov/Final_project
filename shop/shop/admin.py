@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from shop.models import Category, Product, Order, OrderItem
+from shop.models import Category, Product, Order, OrderItem, Genre
 
 
 class OrderItemInline(admin.TabularInline):
@@ -16,7 +16,12 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
 
 
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+
+
 admin.site.register(Category)
 admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(OrderItem)
+admin.site.register(Genre)
