@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 
+
 STATUS = (
     (0, "cart"),
     (1, "ordered"),
@@ -10,57 +11,96 @@ STATUS = (
 )
 
 
-# class User(models.Model):
-#     username = models.CharField(max_length=50)
-#     email = models.EmailField()
-
-
 class User(AbstractUser):
     email = models.EmailField()
 
 
-class Book(models.Model):
-    title = models.CharField(max_length=40)
-    price = models.DecimalField(decimal_places=2, max_digits=5)
-    quantity = models.IntegerField()
-    id_in_store = models.IntegerField()
+class Category(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+    slug = models.SlugField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
+    def __str__(self):
+        return self.name
 
     def get_absolute_url(self):
-        some_id = self.pk
-        return reverse("blog:post_detail", kwargs={"pk": some_id})
+        return reverse('shop:product_list_by_category', args=[self.slug])
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    category = models.ForeignKey(Category,
+                                 related_name='products',
+                                 on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=150, db_index=True)
+    genre = models.ManyToManyField(Genre)
+    author = models.CharField(max_length=70)
+    slug = models.CharField(max_length=150, db_index=True, unique=True)
+    image = models.ImageField(upload_to="images", blank=True)
+    description = models.TextField(max_length=1000, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    available = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    uploaded = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Book'
+        verbose_name_plural = 'Books'
+        index_together = (('id', 'slug'), )
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:book-detail', args=[self.id, self.slug])
 
 
 class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.IntegerField(choices=STATUS, default=0)
-    delivery_address = models.CharField(max_length=140)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    delivery_address = models.CharField(max_length=250)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=100)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    payment = models.BooleanField(default=False)
 
-    @property
-    def shipping(self):
-        shipping = False
-        orderitems = self.orderitem_set.all()
-        for i in orderitems:
-            if i.product.digital == False:
-                shipping = True
-        return shipping
+    class Meta:
+        ordering = ('-created_on',)
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
 
-    @property
-    def get_cart_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.get_total for item in orderitems])
-        return total
+    def __str__(self):
+        return 'Client Order {}'.format(self.id)
 
-    @property
-    def get_cart_items(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.quantity for item in orderitems])
-        return total
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.items.all())
 
 
 class OrderItem(models.Model):
-    order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    book = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+    def get_cost(self):
+        return self.price * self.quantity
 
     @property
     def get_total(self):
@@ -68,9 +108,3 @@ class OrderItem(models.Model):
         return total
 
 
-class Cart(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    date_added = models.DateTimeField(auto_now_add=True)
-    quantity = models.IntegerField(default=1)
-    product = models.ForeignKey(Book, unique=False, on_delete=models.PROTECT)
-    ordered = models.BooleanField(default=False)

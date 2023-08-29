@@ -3,8 +3,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<title></title>
+    {% block title %}Book List{% endblock %}
     <meta charset="UTF-8">
 </head>
+
 <body>
 {% block content %}
 {#    <label>#}
@@ -18,47 +21,6 @@
     <h1>Bookshelf</h1>
     </fieldset>
 {% if object_list %}
-
-
-{#    <ol>#}
-{#        {% for book in object_list %}#}
-{#            <li>#}
-{#                <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">#}
-{#                    <div class="col">#}
-{#                        <div class="card mb-4 rounded-3 shadow-sm">#}
-{#                            <div class="card-header py-3">#}
-{#                                <h4 class="my-0 fw-normal"><a href="{% url "shop:book-detail" book.id %}">{{ book.title }}</a></h4>#}
-{#                            </div>#}
-{##}
-{#                            <div class="card-body">#}
-{#                                <h1 class="card-title pricing-card-title">$5<small class="text-body-secondary fw-light"></small></h1>#}
-{#                                <ul class="list-unstyled mt-3 mb-4">#}
-{#                                    <li>10 users included</li>#}
-{#                                    <li>2 GB of storage</li>#}
-{#                                    <li>Email support</li>#}
-{#                                    <li>Help center access</li>#}
-{#                                </ul>#}
-{##}
-{#                                <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
-{#                                <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">#}
-{#                                    <div class="modal-dialog">#}
-{#                                        <div class="modal-content">#}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </li>#}
-
-
-
-
-
-
-
             <div class="row">
 		{% for book in object_list %}
 		<div class="col-lg-3">
@@ -76,7 +38,8 @@
 
 {#                        <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
 {#                        <button type="button" class="w-100 btn btn-lg btn-outline-primary" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
-                        <input type="button" class="w-100 btn btn-lg btn-outline-primary" onclick="location.href='{% url "shop:cart" %}';" value="Add to Cart" />
+                        <input type="button" class="w-100 btn btn-lg btn-outline-primary" onclick="location.href='{% url "Cart:cart_detail" %}';" value="Add to Cart" />
+
                         <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -88,7 +51,7 @@
                 </div>
 				<hr>
 
-				<a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk %}">View</a>
+				<a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
 
 			</div>
 		</div>

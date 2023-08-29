@@ -1,41 +1,34 @@
 {% extends "base.html" %}
-
 {% load static %}
-<p> {{ is_paginated }} </p>
+{% load widget_tweaks %}
+{#<p> {{ is_paginated }} </p>#}
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 card mb-4  mt-3 left  top">
-                <div class="card-body">
-                    <h1>Title: {{ book.title }} </h1>
-                    <div class="col-md-8 card mb-4  mt-3 left  top">
-                        <div class="card-body">
-                            <p class=" text-muted">Price: {{ book.price }}$</p>
-                            <p class="card-text ">Summary: <small>Some description...</small></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    <div style="margin-top: 20px" class="row row-cols-1 row-cols-md-3 mb-3 text-center">
         <div class="col">
             <div class="card mb-4 rounded-3 shadow-sm">
                 <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">Book #1</h4>
+                    <h4 class="my-0 fw-normal">{{ book.name }}</h4>
                 </div>
 
                 <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$5<small class="text-body-secondary fw-light"></small></h1>
+                    <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
                     <ul class="list-unstyled mt-3 mb-4">
-                        <li>10 users included</li>
-                        <li>2 GB of storage</li>
-                        <li>Email support</li>
-                        <li>Help center access</li>
+                        <p class="card-text "><img src="{{ userpost.image.url }}" alt=""></p>
+                        <li><img width="50%" src="{{ book.image.url }}" alt=""></li>
+                        <div class="card-body">
+                        <li><strong>Description: </strong>{{ book.description }}</li>
+                        </div>
+                        <li><strong>Category: </strong>{{ book.category }}</li>
                     </ul>
-{#                  <button type="button" class="btn btn-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="">Contact Us</button>#}
-                    <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>
+
+                    <form method="post" action="{% url 'Cart:cart_add' book.pk %}">
+                        {% csrf_token %}
+                        {{ part_form.quantity|add_class:'form-control' }}
+                        <button style="margin-top: 10px" class="w-100 btn btn-lg btn-outline-primary" type="submit">Add to Cart</button>
+                    </form>
+
+{#                    <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "Cart:cart_detail" %}">Add to Cart</button>#}
                     <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -48,19 +41,6 @@
         </div>
     </div>
 
-{#{% load static %}#}
-{#{% block title %}#}
-{#{{ product.name }}#}
-{#{% endblock %}#}
-{#{% block content %}#}
-{#<div class="product-detail">#}
-{#<img src="{% if product.image %}{{ product.image.url }}{% else %}#}
-{#{% static "img/no_image.png" %}{% endif %}">#}
-{#<h1>{{ book.title }}</h1>#}
-{#<h2>#}
-{#<a href="{{ book.category.get_absolute_url }}">{{product.category }}</a>#}
-{#</h2>#}
-{#<p class="price">${{ book.price }}</p>#}
-{#{{ product.description|linebreaks }}#}
-{#</div>#}
 {% endblock content %}
+
+Quantity

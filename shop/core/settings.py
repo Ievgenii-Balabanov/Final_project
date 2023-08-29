@@ -39,12 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "shop",
-    "cart",
+    "widget_tweaks",
+    "Cart",
+    "crispy_forms",
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,16 +62,17 @@ ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-                "Cart.context_processors.cart",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        ,
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'Cart.context_processors.cart',
             ],
         },
     },
@@ -85,7 +91,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "shop.User"
+# AUTH_USER_MODEL = "shop.User"
 
 LOGIN_URL = 'login'
 
@@ -136,9 +142,12 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL = "/media/"
+CART_SESSION_ID = 'cart'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -147,4 +156,4 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CART_SESSION_ID = "cart"
+AUTH_USER_MODEL = "shop.User"

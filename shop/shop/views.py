@@ -1,24 +1,18 @@
-import datetime
-import json
-
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import login as auth_login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.generic.edit import FormMixin
+
+from Cart.cart import Cart
+from .forms import RegisterForm, ParForm, OrderCreateForm
+from .models import Category, Product, OrderItem, Order
 
 
-from shop.forms import RegisterForm
-from shop.models import Book, Cart, Order, OrderItem
-from shop.utils import cartData, guestOrder
-
-
-# def index(request):
-#     return render(request, "index.html")
+def index(request):
+    return render(request, "index.html")
 
 
 class RegisterFormView(generic.FormView):
@@ -43,14 +37,14 @@ class LoginFormView(LoginView):
 
 
 class BookListView(generic.ListView):
-    model = Book
+    model = Product
     template_name = "shop/book_list.html"
     paginate_by = 5
-    queryset = Book.objects.all()
+    queryset = Product.objects.all()
 
 
 class BookInstanceDetailView(generic.DetailView):
-    model = Book
+    model = Product
     template_name = "shop/book_detail.html"
     context_object_name = "book"
 
@@ -68,109 +62,44 @@ class BookInstanceDetailView(generic.DetailView):
     def get_success_url(self):
         return reverse_lazy("shop:book-detail", kwargs={"pk": self.kwargs.get("pk")})
 
-
-def index(request):
-    data = cartData(request)
-
-    cartItems = data['cartItems']
-    order = data['order']
-    items = data['items']
-
-    products = Book.objects.all()
-    context = {'products': products, 'cartItems': cartItems}
-    return render(request, 'index.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['part_form'] = ParForm()  # Your part form
+        return context
 
 
-def cart(request):
-    data = cartData(request)
-
-    cartItems = data['cartItems']
-    order = data['order']
-    items = data['items']
-
-    context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'shop/cart.html', context)
-
-
-def checkout(request):
-    data = cartData(request)
-
-    cartItems = data['cartItems']
-    order = data['order']
-    items = data['items']
-
-    context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'shop/checkout.html', context)
+def product_list(request, category_slug=None):
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.filter(available=True)
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=category)
+    return render(request,
+                  'shop/product/list.html',
+                  {'category': category,
+                   'categories': categories,
+                   'products': products})
 
 
-def updateItem(request):
-    data = json.loads(request.body)
-    productId = data['productId']
-    action = data['action']
-    print('Action:', action)
-    print('Product:', productId)
+def order_create(request):
+    cart = Cart(request)
+    if request.POST:
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        delivery_address = request.POST.get("delivery_address")
+        postal_code = request.POST.get("postal_code")
+        city = request.POST.get("city")
+        order = Order.objects.create(first_name=first_name, last_name=last_name, email=email,
+                                     delivery_address=delivery_address,postal_code=postal_code, city=city)
+        order.save()
 
-    customer = request.user.customer
-    product = Book.objects.get(id=productId)
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
-    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
-
-    if action == 'add':
-        orderItem.quantity = (orderItem.quantity + 1)
-    elif action == 'remove':
-        orderItem.quantity = (orderItem.quantity - 1)
-
-    orderItem.save()
-
-    if orderItem.quantity <= 0:
-        orderItem.delete()
-
-    return JsonResponse('Item was added', safe=False)
-
-
-def processOrder(request):
-    transaction_id = datetime.datetime.now().timestamp()
-    data = json.loads(request.body)
-
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        for item in cart:
+            OrderItem.objects.create(order=order, book=item["product"], price=item['price'], quantity=item['quantity'])
+            cart.clear()
+            return render(request, 'shop/orders/order/created.html',
+                          {'order': order})
     else:
-        customer, order = guestOrder(request, data)
-
-    total = float(data['form']['total'])
-    order.transaction_id = transaction_id
-
-    if total == order.get_cart_total:
-        order.complete = True
-    order.save()
-
-    # if order.shipping == True:
-    #     ShippingAddress.objects.create(
-    #         customer=customer,
-    #         order=order,
-    #         address=data['shipping']['address'],
-    #         city=data['shipping']['city'],
-    #         state=data['shipping']['state'],
-    #         zipcode=data['shipping']['zipcode'],
-    #     )
-
-    return JsonResponse('Payment submitted..', safe=False)
-
-
-def product_list(request):
-    # categories = Category.objects.all()
-    products = Book.objects.filter(available=True)
-    products = products.filter()
-    return render(request, 'shop/book_list.html',
-                  {
-                      # 'category': category,
-                      # 'categories': categories,
-                      'products': products
-                  })
-
-
-def product_detail(request, id):
-    product = get_object_or_404(Book, id=id, available=True)
-    return render(request, 'shop/book_list.html', {'product': product})
+        return render(request, "shop/orders/order/create.html", {'cart': cart})
+    return render(request, "shop/orders/order/create.html", {'cart': cart, 'order': order})

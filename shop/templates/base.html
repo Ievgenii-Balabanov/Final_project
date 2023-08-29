@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>{% block title %}Pizda{% endblock %}</title>
+<title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -24,10 +24,11 @@
 <body>
 <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url "shop:index" %}">Home</a>
+      <a class="navbar-brand" href="{% url "shop:index" %}"><img width="66%" src="{% static "images/Profile Icon.png" %}" alt="icon"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
 
       <div class="collapse navbar-collapse" id="navbarsExample02">
         <ul class="navbar-nav me-auto">
@@ -40,10 +41,14 @@
             <li>
                 <a class="nav-link active" aria-current="page" href="{% url "shop:login" %}">Login</a>
             </li>
+            <li>
+            <a class="nav-link active" aria-current="page" href="{% url 'shop:register' %}">Sign Up</a>
+{#                <a href="{% url 'shop:register' %}">Register</a>#}
+            </li>
         {% endif %}
         </ul>
           <div class="form-inline my-2 my-lg-0" id="block1">
-	     	<a href="{% url "shop:cart" %}">
+	     	<a href="{% url "Cart:cart_detail" %}">
                 <img  id="cart-icon" src="{% static "images/cart.png" %}">
 	    	</a>
         </div>
@@ -93,8 +98,8 @@
                       {% endif %}
 {#                      <li><a href="{% url 'blog:public_profile' user.id %}">User profile</a></li>#}
                   {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'shop:register' %}">Register</a></li>
+{#                    <li><a href="{% url 'login' %}">Login</a></li>#}
+{#                    <li><a href="{% url 'shop:register' %}">Register</a></li>#}
                   {% endif %}
                 </ul>
 
@@ -140,3 +145,4 @@
 </div>
 
 </html>
+
