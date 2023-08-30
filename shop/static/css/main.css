@@ -100,14 +100,6 @@ h1,h2,h3,h4,h5,h6{
 	display: none!important;
 }
 
-/*#block1 {*/
-/*display: block;*/
-/*}*/
-
-/*#block2 {*/
-/*display: block;*/
-/*	margin-right: 40px;*/
-/*}*/
-
-
-
+#carousel {
+	color: #ececec;
+}

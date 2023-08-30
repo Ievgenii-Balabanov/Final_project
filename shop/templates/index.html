@@ -32,7 +32,7 @@
 
             <div class="carousel-inner">
                 <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
                     <div class="container">
                         <div class="carousel-caption text-start">
                             <h1>Example headline.</h1>
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
                     <div class="container">
                         <div class="carousel-caption">
                             <h1>Another example headline.</h1>
@@ -54,21 +54,21 @@
                 </div>
 
                 <div class="carousel-item active">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
 {#                        <image href="{% static "images/placeholder.png" %}" width="100%" height="100%"></image>#}
 {#                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">#}
                         <title>Placeholder</title>
 {#                        <rect width="100%" height="100%" fill="#55595c"></rect>#}
-                        <image width="100%" height="300%" xlink:href="{% static "images/bookshelf.jpeg" %}" />
-                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">Name?</text>
+                        <image width="100%" height="125%" xlink:href="{% static "images/bookshelf.webp" %}" />
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
                     </svg>
-{#                    </svg>#}
                     <div class="container">
-                        <div class="carousel-caption text-end">
-                            <h1>One more for good measure.</h1>
-                            <p>Some representative placeholder content for the third slide of this carousel.</p>
-                            <p><a class="btn btn-lg btn-primary" href="{% url "shop:book-list" %}">View Bookshelf</a></p>
+                        <div style="color: white" class="carousel-caption text-end">
+                            <h1 id="carousel">"Books are a uniquely portable magic"</h1>
+                            <h3 id="carousel">Stephen King</h3>
+                                </text>
+{#                            <p><a class="btn btn-lg btn-primary" href="{% url "shop:book-list" %}">View Bookshelf</a></p>#}
                         </div>
                     </div>
                 </div>

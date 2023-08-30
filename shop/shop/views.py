@@ -1,14 +1,13 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic.edit import FormMixin
+from django.views.generic import ListView
 
 from Cart.cart import Cart
-from .forms import RegisterForm, ParForm, OrderCreateForm
-from .models import Category, Product, OrderItem, Order
+from .forms import ParForm, RegisterForm
+from .models import Category, Genre, Order, OrderItem, Product
 
 
 def index(request):
@@ -36,7 +35,21 @@ class LoginFormView(LoginView):
         return reverse_lazy('shop:index')
 
 
-class BookListView(generic.ListView):
+def logout_view(request):
+    logout(request)
+    return redirect('shop:index')
+
+
+class BookGenre:
+    """
+    Book genres
+    """
+
+    def get_genres(self):
+        return Genre.objects.all()
+
+
+class BookListView(BookGenre, generic.ListView):
     model = Product
     template_name = "shop/book_list.html"
     paginate_by = 5
@@ -92,7 +105,7 @@ def order_create(request):
         postal_code = request.POST.get("postal_code")
         city = request.POST.get("city")
         order = Order.objects.create(first_name=first_name, last_name=last_name, email=email,
-                                     delivery_address=delivery_address,postal_code=postal_code, city=city)
+                                     delivery_address=delivery_address, postal_code=postal_code, city=city)
         order.save()
 
         for item in cart:
@@ -103,3 +116,15 @@ def order_create(request):
     else:
         return render(request, "shop/orders/order/create.html", {'cart': cart})
     return render(request, "shop/orders/order/create.html", {'cart': cart, 'order': order})
+
+
+class FilterBookByGenre(BookGenre, ListView):
+    """
+    Books filtering by genre
+    """
+
+    template_name = "shop/genre_list.html"
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(genre__in=self.request.GET.getlist("genre"))
+        return queryset

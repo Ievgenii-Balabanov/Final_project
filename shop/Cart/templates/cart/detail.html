@@ -34,7 +34,9 @@
                 {% for item in cart %}
                     {% with product=item.product %}
                         <div class="cart-row">
-                            <div style="flex:2"><img class="row-image" src="{% static 'images/placeholder.png' %}"></div>
+{#                            <div style="flex:2"><img class="row-image" src="{% static 'images/placeholder.png' %}"></div>#}
+                            <div style="flex:2"><p><img width="25%" src="{{ item.product.image.url }}" alt=""></p></div>
+
                             <div style="flex:2"><p>{{ product.name }}</p></div>
                             <div style="flex:1"><p>{{ item.quantity }}</p></div>
                             <div style="flex:1"><p><a href="{% url "Cart:cart_remove" product.id%}">Remove</a></p></div>

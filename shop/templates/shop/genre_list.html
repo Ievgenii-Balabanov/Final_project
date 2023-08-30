@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title></title>
+    {% block title %}Book List{% endblock %}
+    <meta charset="UTF-8">
+</head>
+
+<body>
+{% block content %}
+    <fieldset>
+    <h1>Bookshelf</h1>
+    </fieldset>
+    {% if object_list %}
+        <div class="row">
+            {% for book in object_list %}
+                    <div class="col-lg-3">
+                        <div class="box-element product">
+                            <div class="card mb-4 rounded-2 shadow-sm">
+                                <div class="card-header py-3">
+                                    <h2>{{ book.name }} </h2>
+                                </div>
+
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                        <p><img width="70%" src="{{ book.image.url }}" alt=""></p>
+                                    </ul>
+
+                                    <input type="button" class="w-100 btn btn-lg btn-outline-primary" onclick="location.href='{% url "Cart:cart_detail" %}';" value="Add to Cart" />
+
+                                    <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
+                        </div>
+                    </div>
+		    {% endfor %}
+        </div>
+    {% else %}
+        <p><h3>Oops... No books that match the search parameters &#9785;</h3></p>
+    {% endif %}
+{% endblock content %}
+
+</body>
+</html>

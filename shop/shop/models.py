@@ -44,7 +44,7 @@ class Product(models.Model):
                                  on_delete=models.CASCADE)
 
     name = models.CharField(max_length=150, db_index=True)
-    genre = models.ManyToManyField(Genre)
+    genre = models.ManyToManyField(Genre, verbose_name="genre")
     author = models.CharField(max_length=70)
     slug = models.CharField(max_length=150, db_index=True, unique=True)
     image = models.ImageField(upload_to="images", blank=True)

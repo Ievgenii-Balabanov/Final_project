@@ -1,67 +1,61 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title></title>
+    <title></title>
     {% block title %}Book List{% endblock %}
     <meta charset="UTF-8">
 </head>
 
 <body>
 {% block content %}
-{#    <label>#}
-{#        <select class="filter" name="filter">#}
-{#            {% for book in book_list %}#}
-{#                <option value="{{book}}">{{book.price}}</option>#}
-{#            {% endfor %}#}
-{#        </select>#}
-{#    </label>#}
     <fieldset>
-    <h1>Bookshelf</h1>
+        <h1>Bookshelf</h1>
     </fieldset>
-{% if object_list %}
-            <div class="row">
-		{% for book in object_list %}
-		<div class="col-lg-3">
-			<div class="box-element product">
-                <div class="card mb-4 rounded-2 shadow-sm">
-                    <div class="card-header py-3">
-                        <h2>{{ book.title }}</h2>
-                    </div>
+    {% if object_list %}
+        <div class="row">
+{#            {% for book in object_list %}#}
+            {% for book in view.get_queryset %}
+                <div class="col-lg-3">
+                    <div class="box-element product">
+                        <div class="card mb-4 rounded-2 shadow-sm">
+                            <div class="card-header py-3">
+                                <h2 align="center">{{ book.name }} </h2>
+                            </div>
 
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <img class="thumbnail" src="{% static "images/book1.jpg" %}">
-                        </ul>
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
+                                <ul class="list-unstyled mt-3 mb-4" align="center">
+                                    <img width="70%" src="{{ book.image.url }}" alt="">
+                                </ul>
+{#                                    <form method="post" action="{% url 'Cart:cart_add' book.pk %}">#}
+{#                                        {% csrf_token %}#}
+{#                                        {{ part_form.quantity|add_class:'form-control' }}#}
+{#                                        <button style="margin-top: 10px" class="w-100 btn btn-lg btn-outline-primary" type="submit">Add to Cart</button>#}
+{#                                    </form>#}
+{#                                    <input type="button" class="w-100 btn btn-lg btn-outline-primary" onclick="location.href='{% url "Cart:cart_add" book.pk %}';" value="Add to Cart" />#}
 
-{#                        <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
-{#                        <button type="button" class="w-100 btn btn-lg btn-outline-primary" data-bs-whatever="@getbootstrap" data-url="{% url "shop:cart" %}">Add to Cart</button>#}
-                        <input type="button" class="w-100 btn btn-lg btn-outline-primary" onclick="location.href='{% url "Cart:cart_detail" %}';" value="Add to Cart" />
+                                <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
 
-                        <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
                     </div>
                 </div>
-				<hr>
-
-				<a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
-
-			</div>
-		</div>
-		{% endfor %}
-	</div>
-
-
-{% else %}
-    <p>No books are available</p>
-{% endif %}
+            {% endfor %}
+{#		    {% endfor %}#}
+        </div>
+    {% else %}
+        <p>No books are available</p>
+    {% endif %}
 {% endblock content %}
 
 </body>
