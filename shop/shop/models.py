@@ -53,6 +53,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     uploaded = models.DateTimeField(auto_now=True)
+    id_in_warehouse = models.IntegerField()
 
     class Meta:
         ordering = ('name',)
@@ -101,5 +102,3 @@ class OrderItem(models.Model):
 
     def get_cost(self):
         return self.price * self.quantity
-
-

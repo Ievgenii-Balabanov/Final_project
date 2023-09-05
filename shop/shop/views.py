@@ -1,3 +1,5 @@
+import requests
+import json
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, get_object_or_404, redirect
@@ -46,14 +48,38 @@ class BookGenre:
     """
 
     def get_genres(self):
-        return Genre.objects.all()
+        genre_list = "http://127.0.0.1:8001/genre/"
+        data = requests.get(genre_list).json()
+        return data
+        # return Genre.objects.all()
 
 
 class BookListView(BookGenre, generic.ListView):
     model = Product
     template_name = "shop/book_list.html"
-    paginate_by = 5
-    queryset = Product.objects.all()
+    # paginate_by = 5
+    # queryset = get_queryset
+
+    def get_queryset(self):
+        warehouse = "http://127.0.0.1:8001/book/"
+        json_result = requests.get(warehouse).json()
+        return json_result
+
+
+# class CategoryDetailView(generic.DetailView):
+#     model = Product
+#     context_object_name = "category"
+#
+#     def get_object(self, queryset=None):
+#         if queryset is None:
+#             queryset = self.get_queryset()
+#
+#         pk = self.kwargs.get(self.pk_url_kwarg)
+#         if pk is not None:
+#             queryset = queryset.filter(pk=pk)
+#
+#         obj = queryset.get()
+#         return obj
 
 
 class BookInstanceDetailView(generic.DetailView):
@@ -125,6 +151,10 @@ class FilterBookByGenre(BookGenre, ListView):
 
     template_name = "shop/genre_list.html"
 
+    # def get_queryset(self):
+    #     queryset = Book.objects.filter(genre__in=self.request.GET.getlist("genre"))
+    #     return queryset
+
     def get_queryset(self):
-        queryset = Product.objects.filter(genre__in=self.request.GET.getlist("genre"))
-        return queryset
+        genre = self.request.GET.getlist("genre")
+        return genre

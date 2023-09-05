@@ -14,7 +14,7 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 
     {% load static %}
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <link rel="stylesheet" href="{% static "media/static/css/main.css" %}">
     {% block extra_js %}
         <script src="{% static "js/scripts.js" %}"></script>
         <script src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>
@@ -26,13 +26,13 @@
     <body>
         <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url "shop:index" %}"><img width="66%" src="{% static "images/Profile Icon.png" %}" alt="icon"></a>
+                <a class="navbar-brand" href="{% url "shop:index" %}"><img width="66%" src="{% static "media/static/images/Profile Icon.png" %}" alt="icon"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="form-inline my-2 my-lg-0" id="block1">
                     <a href="{% url "Cart:cart_detail" %}">
-                        <img  id="cart-icon" src="{% static "images/cart.png" %}">
+                        <img  id="cart-icon" src="{% static "media/static/images/cart.png" %}">
                     </a>
                 </div>
             </div>

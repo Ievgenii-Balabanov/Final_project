@@ -95,7 +95,7 @@
         <hr>
 
         <li>
-            <a href="#" class="nav-link text-white">Dashboard</a>
+            <a href="{% url "shop:book-list" %}" class="nav-link text-white">Bookshelf</a>
         </li>
         <li>
             <a href="#" class="nav-link text-white">Orders</a>
@@ -120,8 +120,10 @@
                     {% for genre in view.get_genres %}
                         <div class="editContent">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="genre" value="{{ genre.id }}">
-                                <span class="span editContent" >{{ genre }}</span>
+                                <label>
+                                    <input class="form-check-input" type="checkbox" name="genre" value="{{ genre.id }}">
+                                    <span class="span editContent" >{{ genre.name }}</span>
+                                </label>
                             </div>
 {#                            <input type="checkbox" class="checked" name="genre" value="{{ genre.id }}">#}
 {#                            <span class="span editContent" >{{ genre }}</span>#}
