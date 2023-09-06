@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "shop",
-    # "widget_tweaks",
     "Cart",
-    # "crispy_forms",
     "storages",
+    "widget_tweaks",
     'django_celery_results',
     'django_celery_beat',
 ]
@@ -206,3 +205,12 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 NOREPLY_EMAIL = "noreply@hillel.io"
 
+AWS_S3_ACCESS_KEY_ID = 'AKIAQERNKNPAHXU3EQWV'
+AWS_S3_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'moonaudioproductionbookshop'
+AWS_QUERYSTRING_AUTH = False
+
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+ADMIN_MEDIA_PREFIX = '/static/admin/'

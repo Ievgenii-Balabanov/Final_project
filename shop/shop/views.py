@@ -48,38 +48,22 @@ class BookGenre:
     """
 
     def get_genres(self):
-        genre_list = "http://127.0.0.1:8001/genre/"
-        data = requests.get(genre_list).json()
-        return data
-        # return Genre.objects.all()
+        # genre_list = "http://127.0.0.1:8001/genre/"
+        # data = requests.get(genre_list).json()
+        # return data
+        return Genre.objects.all()
 
 
 class BookListView(BookGenre, generic.ListView):
     model = Product
     template_name = "shop/book_list.html"
-    # paginate_by = 5
-    # queryset = get_queryset
+    queryset = Product.objects.all()  # -> Product is a shop model
+    paginate_by = 8
 
-    def get_queryset(self):
-        warehouse = "http://127.0.0.1:8001/book/"
-        json_result = requests.get(warehouse).json()
-        return json_result
-
-
-# class CategoryDetailView(generic.DetailView):
-#     model = Product
-#     context_object_name = "category"
-#
-#     def get_object(self, queryset=None):
-#         if queryset is None:
-#             queryset = self.get_queryset()
-#
-#         pk = self.kwargs.get(self.pk_url_kwarg)
-#         if pk is not None:
-#             queryset = queryset.filter(pk=pk)
-#
-#         obj = queryset.get()
-#         return obj
+    # def get_queryset(self):  # -> api port 8001
+    #     warehouse = "http://127.0.0.1:8001/book/"
+    #     json_result = requests.get(warehouse).json()
+    #     return json_result
 
 
 class BookInstanceDetailView(generic.DetailView):
@@ -121,6 +105,29 @@ def product_list(request, category_slug=None):
                    'products': products})
 
 
+# def order_create(request):
+#     cart = Cart(request)
+#     if request.POST:
+#         first_name = request.POST.get("first_name")
+#         last_name = request.POST.get("last_name")
+#         email = request.POST.get("email")
+#         delivery_address = request.POST.get("delivery_address")
+#         postal_code = request.POST.get("postal_code")
+#         city = request.POST.get("city")
+#         order = Order.objects.create(first_name=first_name, last_name=last_name, email=email,
+#                                      delivery_address=delivery_address, postal_code=postal_code, city=city)
+#         order.save()
+#
+#         for item in cart:
+#             OrderItem.objects.create(order=order, book=item["product"], price=item['price'], quantity=item['quantity'])
+#             cart.clear()
+#             return render(request, 'shop/orders/order/created.html',
+#                           {'order': order})
+#     else:
+#         return render(request, "shop/orders/order/create.html", {'cart': cart})
+#     return render(request, "shop/orders/order/create.html", {'cart': cart, 'order': order})
+
+
 def order_create(request):
     cart = Cart(request)
     if request.POST:
@@ -139,6 +146,8 @@ def order_create(request):
             cart.clear()
             return render(request, 'shop/orders/order/created.html',
                           {'order': order})
+
+
     else:
         return render(request, "shop/orders/order/create.html", {'cart': cart})
     return render(request, "shop/orders/order/create.html", {'cart': cart, 'order': order})
@@ -151,10 +160,10 @@ class FilterBookByGenre(BookGenre, ListView):
 
     template_name = "shop/genre_list.html"
 
-    # def get_queryset(self):
-    #     queryset = Book.objects.filter(genre__in=self.request.GET.getlist("genre"))
-    #     return queryset
-
     def get_queryset(self):
-        genre = self.request.GET.getlist("genre")
-        return genre
+        queryset = Product.objects.filter(genre__in=self.request.GET.getlist("genre"))
+        return queryset
+
+    # def get_queryset(self):
+    #     genre = self.request.GET.getlist("genre")
+    #     return genre

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from shop.models import User, Product, Order
 
-PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
+PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 6)]
 
 
 class RegisterForm(forms.ModelForm):

@@ -82,6 +82,22 @@
 {#        </li>#}
 {#    </ul>#}
 {#</div>#}
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+form {
+    position: absolute;
+    top: 330px;
+    margin-left: -5px;
+}
+
+{#.d-flex {#}
+{#    width: 200px;#}
+{#}#}
+</style>
+</head>
+<body>
 <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 200px;">
     <ul class="nav nav-pills flex-column mb-auto">
         {% if request.user.is_authenticated %}
@@ -100,16 +116,7 @@
         <li>
             <a href="#" class="nav-link text-white">Orders</a>
         </li>
-        <li>
-            <a href="#" class="nav-link text-white">
-                Products
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link text-white">
-                Customers
-            </a>
-        </li>
+
     </ul>
 
     {% if request.path == '/book/' or request.path == '/filter/' %}
@@ -122,7 +129,8 @@
                             <div class="form-check">
                                 <label>
                                     <input class="form-check-input" type="checkbox" name="genre" value="{{ genre.id }}">
-                                    <span class="span editContent" >{{ genre.name }}</span>
+                                    {{ genre.name }}
+{#                                    <span class="span editContent" >{{ genre.name }}</span>#}
                                 </label>
                             </div>
 {#                            <input type="checkbox" class="checked" name="genre" value="{{ genre.id }}">#}

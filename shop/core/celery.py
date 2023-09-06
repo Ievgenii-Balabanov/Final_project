@@ -22,6 +22,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "add-every-2-minutes": {
         "task": "shop.tasks.add_new_books",
+        # "schedule": 120.0,
         "schedule": crontab(minute=0, hour='*/3'),
     }
 }

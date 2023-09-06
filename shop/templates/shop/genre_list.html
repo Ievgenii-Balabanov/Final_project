@@ -20,15 +20,14 @@
                     <div class="box-element product">
                         <div class="card mb-4 rounded-2 shadow-sm">
                             <div class="card-header py-3">
-                                <h2 align="center">{{ book }} </h2>
-                                <h2 align="center">{{ book.image.url }} </h2>
+                                <h2 align="center">{{ book.name }} </h2>
                             </div>
 
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
                                 <ul class="list-unstyled mt-3 mb-4" align="center">
 {#                                    <img width="70%" src="{{ book.image.url }}" alt="">#}
-                                    <img width="70%" src="{{ book.image }}" alt="">
+                                    <img width="70%" src="{{ book.image.url }}" alt="">
                                 </ul>
 {#                                    <form method="post" action="{% url 'Cart:cart_add' book.pk %}">#}
 {#                                        {% csrf_token %}#}
@@ -47,7 +46,7 @@
                             </div>
                         </div>
                         <hr>
-{#                        <a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>#}
+                        <a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
                     </div>
                 </div>
             {% endfor %}

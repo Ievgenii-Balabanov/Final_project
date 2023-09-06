@@ -8,11 +8,6 @@ from shop.models import Category, Genre, Product
 
 # django.setup()
 
-#
-# @shared_task
-# def add(x, y):
-#     return x + y
-
 
 @shared_task
 def add_new_books():
@@ -33,10 +28,11 @@ def add_new_books():
             uploaded = item['uploaded']
             id_in_warehouse = item['id']
             if not Product.objects.filter(id_in_warehouse=id_in_warehouse).exists():
-                new = Product.objects.create(category=category, name=name, author=author, slug=slug, image=image,
-                                             description=description, price=price, available=available, created=created,
-                                             uploaded=uploaded, id_in_warehouse=id_in_warehouse)
-                new.genre.add(Genre.objects.get(id=item['genre']))
+                if available:
+                    new = Product.objects.create(category=category, name=name, author=author, slug=slug, image=image,
+                                                 description=description, price=price, available=available, created=created,
+                                                 uploaded=uploaded, id_in_warehouse=id_in_warehouse)
+                    new.genre.add(Genre.objects.get(id=item['genre']))
 
 
 

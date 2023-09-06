@@ -16,7 +16,7 @@ urlpatterns = [
     path("book/", views.BookListView.as_view(), name="book-list"),
     path("filter/", views.FilterBookByGenre.as_view(), name="genre-filter"),
     # path("json-filter/", views.JsonFilterMoviesView.as_view(), name='genre-js-filter'),
-    path("book/<int:pk>/<slug:slug>", views.BookInstanceDetailView.as_view(), name="book-detail"),
+    path("book/<int:pk>/<slug:slug>/", views.BookInstanceDetailView.as_view(), name="book-detail"),
 
     path("create/", views.order_create, name='order-create'),
 
