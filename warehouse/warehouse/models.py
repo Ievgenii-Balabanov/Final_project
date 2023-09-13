@@ -76,9 +76,10 @@ class Order(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
     payment = models.BooleanField(default=False)
     status = models.IntegerField(choices=STATUS)
+    shop_order_id = models.IntegerField()
 
     class Meta:
-        ordering = ('-created_on',)
+        ordering = ('created_on',)
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
 

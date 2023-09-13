@@ -56,7 +56,7 @@ class Product(models.Model):
     id_in_warehouse = models.IntegerField()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('-created',)
         verbose_name = 'Book'
         verbose_name_plural = 'Books'
         index_together = (('id', 'slug'), )

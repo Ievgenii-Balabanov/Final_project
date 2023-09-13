@@ -12,4 +12,5 @@ router.register(r"genre", views.GenreViewSet, basename="genre")
 urlpatterns = [
     path("", include(router.urls)),
     path("json_dumpdata", views.dumpdata_api_view),
+    path("create_order/", views.create_order),
 ]

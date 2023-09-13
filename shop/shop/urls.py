@@ -14,10 +14,9 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
 
     path("book/", views.BookListView.as_view(), name="book-list"),
-    path("filter/", views.FilterBookByGenre.as_view(), name="genre-filter"),
-    # path("json-filter/", views.JsonFilterMoviesView.as_view(), name='genre-js-filter'),
     path("book/<int:pk>/<slug:slug>/", views.BookInstanceDetailView.as_view(), name="book-detail"),
+    path("filter/", views.FilterBookByGenre.as_view(), name="genre-filter"),
 
     path("create/", views.order_create, name='order-create'),
-
+    path("warehouse_new_order/", views.warehouse_new_order, name="warehouse_new_order"),
 ]

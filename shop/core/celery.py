@@ -22,7 +22,20 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "add-every-2-minutes": {
         "task": "shop.tasks.add_new_books",
-        # "schedule": 120.0,
-        "schedule": crontab(minute=0, hour='*/3'),
-    }
+        "schedule": 240.0,
+        # "schedule": crontab(minute=0, hour='*/3'),
+    },
+    'add-every-minute': {
+            'task': 'shop.tasks.add_new_category',
+            'schedule': crontab(),
+        },
+    'add-every-two-minutes': {
+            'task': 'shop.tasks.add_new_genre',
+            'schedule': 120.0,
+        },
+    # 'add_new_order_to_warehouse': {
+    #         'task': 'shop.tasks.add_order_to_warehouse',
+    #         # 'schedule': 50.0,
+    #         # 'args': ()
+    #     },
 }

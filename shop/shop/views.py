@@ -2,7 +2,9 @@ import requests
 import json
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, get_object_or_404, redirect
+from django.core import serializers
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import ListView
@@ -10,6 +12,7 @@ from django.views.generic import ListView
 from Cart.cart import Cart
 from .forms import ParForm, RegisterForm
 from .models import Category, Genre, Order, OrderItem, Product
+from shop.tasks import add_order_to_warehouse
 
 
 def index(request):
@@ -48,9 +51,6 @@ class BookGenre:
     """
 
     def get_genres(self):
-        # genre_list = "http://127.0.0.1:8001/genre/"
-        # data = requests.get(genre_list).json()
-        # return data
         return Genre.objects.all()
 
 
@@ -59,11 +59,6 @@ class BookListView(BookGenre, generic.ListView):
     template_name = "shop/book_list.html"
     queryset = Product.objects.all()  # -> Product is a shop model
     paginate_by = 8
-
-    # def get_queryset(self):  # -> api port 8001
-    #     warehouse = "http://127.0.0.1:8001/book/"
-    #     json_result = requests.get(warehouse).json()
-    #     return json_result
 
 
 class BookInstanceDetailView(generic.DetailView):
@@ -91,43 +86,6 @@ class BookInstanceDetailView(generic.DetailView):
         return context
 
 
-def product_list(request, category_slug=None):
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    return render(request,
-                  'shop/product/list.html',
-                  {'category': category,
-                   'categories': categories,
-                   'products': products})
-
-
-# def order_create(request):
-#     cart = Cart(request)
-#     if request.POST:
-#         first_name = request.POST.get("first_name")
-#         last_name = request.POST.get("last_name")
-#         email = request.POST.get("email")
-#         delivery_address = request.POST.get("delivery_address")
-#         postal_code = request.POST.get("postal_code")
-#         city = request.POST.get("city")
-#         order = Order.objects.create(first_name=first_name, last_name=last_name, email=email,
-#                                      delivery_address=delivery_address, postal_code=postal_code, city=city)
-#         order.save()
-#
-#         for item in cart:
-#             OrderItem.objects.create(order=order, book=item["product"], price=item['price'], quantity=item['quantity'])
-#             cart.clear()
-#             return render(request, 'shop/orders/order/created.html',
-#                           {'order': order})
-#     else:
-#         return render(request, "shop/orders/order/create.html", {'cart': cart})
-#     return render(request, "shop/orders/order/create.html", {'cart': cart, 'order': order})
-
-
 def order_create(request):
     cart = Cart(request)
     if request.POST:
@@ -142,11 +100,14 @@ def order_create(request):
         order.save()
 
         for item in cart:
-            OrderItem.objects.create(order=order, book=item["product"], price=item['price'], quantity=item['quantity'])
+            order_item = OrderItem.objects.create(order=order, book=item["product"], price=item['price'],
+                                                  quantity=item['quantity'])
+
+            add_order_to_warehouse.apply_async(args=[order.pk])
             cart.clear()
             return render(request, 'shop/orders/order/created.html',
                           {'order': order})
-
+            # add_order_to_warehouse.apply_async(args=[order.pk])
 
     else:
         return render(request, "shop/orders/order/create.html", {'cart': cart})
@@ -164,6 +125,12 @@ class FilterBookByGenre(BookGenre, ListView):
         queryset = Product.objects.filter(genre__in=self.request.GET.getlist("genre"))
         return queryset
 
-    # def get_queryset(self):
-    #     genre = self.request.GET.getlist("genre")
-    #     return genre
+
+def warehouse_new_order(request):
+    orders = Order.objects.all().values("id", "first_name", "last_name", "email", "delivery_address", "postal_code",
+                                        "city", "created_on", "updated_on", "payment")
+    order_items = OrderItem.objects.all().values("id", "order", "book", "price", "quantity")
+
+    order_list = list(orders)
+    order_items_list = list(order_items)
+    return JsonResponse([order_list, order_items_list], safe=False)

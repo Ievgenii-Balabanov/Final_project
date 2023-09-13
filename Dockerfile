@@ -29,7 +29,7 @@ ENV PYTHONUNBUFFERED 1
 #RUN chmod +x docker/runserver.sh docker/wait-for-command.sh docker/docker-entrypoint.sh create_admin.py
 #USER appuser
 
-EXPOSE 8000
+EXPOSE 80
 
 #ENTRYPOINT ["/bin/bash", "/home/appuser/app/docker/docker-entrypoint.sh"]
-CMD ["python", "manage.py"]
+CMD ["./", "manage.py"]
