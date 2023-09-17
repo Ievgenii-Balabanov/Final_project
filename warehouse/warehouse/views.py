@@ -160,7 +160,6 @@ def create_order(request):
             for item in request.data.get("book_items"):
                 book = Book.objects.get(pk=item.get("book_id"))
                 order_item = OrderItem.objects.create(
-                    # order_id=order.pk, book_id=item.get("book_id"), price=item.get("price"),
                     order_id=order, book_id=book, price=item.get("price"),
                     quantity=item.get("quantity")
                 )
