@@ -104,10 +104,10 @@ def order_create(request):
                                                   quantity=item['quantity'])
 
             add_order_to_warehouse.apply_async(args=[order.pk])
+            print(order.pk)
             cart.clear()
             return render(request, 'shop/orders/order/created.html',
                           {'order': order})
-            # add_order_to_warehouse.apply_async(args=[order.pk])
 
     else:
         return render(request, "shop/orders/order/create.html", {'cart': cart})

@@ -63,84 +63,119 @@ def dumpdata_api_view(request):
     return JsonResponse([book_list, category_list, genre_list], safe=False)
 
 
+# ------------------------------------------------------------------
 # @api_view(['GET', 'POST'])
 # def create_order(request):
-#     """
-#     List all code snippets, or create a new snippet.
-#     """
+#     print("Hello")
 #     if request.method == 'GET':
 #         snippets = Order.objects.all()
+#         print("GET")
 #         serializer = OrderSerializer(snippets, many=True)
 #         return Response(serializer.data)
 #
-#     elif request.method == 'POST':
+#     elif request.POST:
+#         print("POST")
 #         serializer = OrderSerializer(data=request.data)
 #         if serializer.is_valid():
+#             print("No")
+#             order = Order.objects.create(
+#                 first_name=serializer.data.get("first_name"), last_name=serializer.data.get("last_name"),
+#                 email=serializer.data.get("email"),
+#                 status=serializer.data.get("status"),
+#                 delivery_address=serializer.data.get("delivery_address"), postal_code=serializer.data.get("postal_code"),
+#                 city=serializer.data.get("city"),
+#                 created_on=serializer.data.get("created_on"), updated_on=serializer.data.get("updated_on"),
+#                 payment=serializer.data.get("payment"),
+#                 shop_order_id=serializer.data.get("shop_order_id")
+#             )
 #             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#             for item in request.data.get("book_items"):
+#                 order_item = OrderItem.objects.create(
+#                     order_id=order.pk, book_id=item.get("warehouse_book_id"), price=item.get("price"),
+#                     quantity=item.get("quantity")
+#                 )
+#
+#                 book = Book.objects.get(pk=item.get("warehouse_book_id"))
+#                 book.available = False
+#                 book.save()
+#
+#             return Response(status=status.HTTP_201_CREATED)
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+#             # data = json.loads(serializer)
+#             # order = Order.objects.create(
+#             #     first_name=serializer.data("first_name"), last_name=serializer.data("last_name"), email=serializer.data("email"),
+#             #     status=serializer.data("status"),
+#             #     delivery_address=serializer.data("delivery_address"), postal_code=serializer.data("postal_code"),
+#             #     city=serializer.data("city"),
+#             #     created_on=serializer.data("created_on"), updated_on=serializer.data("updated_on"), payment=serializer.data("payment"),
+#             #     shop_order_id=serializer.data("shop_order_id")
+#             # )
+#         #     for item in request.data.get("book_items"):
+#         #         order_item = OrderItem.objects.create(
+#         #             order_id=order.pk, book_id=item.get("warehouse_book_id"), price=item.get("price"),
+#         #             quantity=item.get("quantity")
+#         #         )
+#         #
+#         #         book = Book.objects.get(pk=item.get("warehouse_book_id"))
+#         #         book.available = False
+#         #         book.save()
+#         #     else:
+#         #         return Response(serializer.errors)
+#         # context = {'data': serializer.data}
+#         # return Response(context)
 
+    # ------------------------------------------------------------------
 
 @api_view(['GET', 'POST'])
 def create_order(request):
     print("Hello")
     if request.method == 'GET':
-        snippets = Order.objects.all()
+        orders = Order.objects.all()
         print("GET")
-        serializer = OrderSerializer(snippets, many=True)
+        serializer = OrderSerializer(orders)
         return Response(serializer.data)
 
-    elif request.POST:
+    elif request.method == 'POST':
         print("POST")
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
-            print("No")
+            print("Serializer is Valid")
+            print(serializer.data.get("shop_order_id"))
+            print(serializer.data.items())
             order = Order.objects.create(
-                first_name=serializer.data.get("first_name"), last_name=serializer.data.get("last_name"),
+                first_name=serializer.data.get("first_name"),
+                last_name=serializer.data.get("last_name"),
                 email=serializer.data.get("email"),
                 status=serializer.data.get("status"),
-                delivery_address=serializer.data.get("delivery_address"), postal_code=serializer.data.get("postal_code"),
+                delivery_address=serializer.data.get("delivery_address"),
+                postal_code=serializer.data.get("postal_code"),
                 city=serializer.data.get("city"),
-                created_on=serializer.data.get("created_on"), updated_on=serializer.data.get("updated_on"),
+                created_on=serializer.data.get("created_on"),
+                updated_on=serializer.data.get("updated_on"),
                 payment=serializer.data.get("payment"),
                 shop_order_id=serializer.data.get("shop_order_id")
             )
-            serializer.save()
-
+            # Order.objects.save()
             for item in request.data.get("book_items"):
+                book = Book.objects.get(pk=item.get("book_id"))
                 order_item = OrderItem.objects.create(
-                    order_id=order.pk, book_id=item.get("warehouse_book_id"), price=item.get("price"),
+                    # order_id=order.pk, book_id=item.get("book_id"), price=item.get("price"),
+                    order_id=order, book_id=book, price=item.get("price"),
                     quantity=item.get("quantity")
                 )
 
-                book = Book.objects.get(pk=item.get("warehouse_book_id"))
+                book = Book.objects.get(pk=item.get("book_id"))
                 book.available = False
                 book.save()
-
-            return Response(status=status.HTTP_201_CREATED)
+            print("No")
+            return Response(order, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-            # data = json.loads(serializer)
-            # order = Order.objects.create(
-            #     first_name=serializer.data("first_name"), last_name=serializer.data("last_name"), email=serializer.data("email"),
-            #     status=serializer.data("status"),
-            #     delivery_address=serializer.data("delivery_address"), postal_code=serializer.data("postal_code"),
-            #     city=serializer.data("city"),
-            #     created_on=serializer.data("created_on"), updated_on=serializer.data("updated_on"), payment=serializer.data("payment"),
-            #     shop_order_id=serializer.data("shop_order_id")
-            # )
-        #     for item in request.data.get("book_items"):
-        #         order_item = OrderItem.objects.create(
-        #             order_id=order.pk, book_id=item.get("warehouse_book_id"), price=item.get("price"),
-        #             quantity=item.get("quantity")
-        #         )
-        #
-        #         book = Book.objects.get(pk=item.get("warehouse_book_id"))
-        #         book.available = False
-        #         book.save()
-        #     else:
-        #         return Response(serializer.errors)
-        # context = {'data': serializer.data}
-        # return Response(context)
+
+
+
+
 
 
     # body_unicode = request.body.decode('utf-8')

@@ -14,6 +14,8 @@ django.setup()
 
 @shared_task
 def add_new_genre():
+    books = Genre.objects.all()
+    books.delete()
     while True:
         warehouse = "http://127.0.0.1:8001/json_dumpdata"
         json_result = requests.get(warehouse).json()
@@ -22,10 +24,13 @@ def add_new_genre():
             id = item["id"]
             if not Genre.objects.filter(id=id).exists():
                 new = Genre.objects.create(id=id, name=name)
+                return
 
 
 @shared_task
 def add_new_category():
+    books = Category.objects.all()
+    books.delete()
     while True:
         warehouse = "http://127.0.0.1:8001/json_dumpdata"
         json_result = requests.get(warehouse).json()
@@ -35,10 +40,13 @@ def add_new_category():
             id = item["id"]
             if not Category.objects.filter(id=id).exists():
                 new = Category.objects.create(id=id, name=name, slug=slug)
+                return
 
 
 @shared_task
 def add_new_books():
+    # books = Product.objects.all()
+    # books.delete()
     while True:
         warehouse = "http://127.0.0.1:8001/json_dumpdata"
         json_result = requests.get(warehouse).json()
@@ -60,6 +68,7 @@ def add_new_books():
                                                  description=description, price=price, available=available,
                                                  created=created, uploaded=uploaded, id_in_warehouse=id_in_warehouse)
                     new.genre.add(Genre.objects.get(id=item['genre']))
+                    break
 
 
 @shared_task
@@ -70,6 +79,8 @@ def send_email(subject, message, from_email):
 @shared_task
 def add_order_to_warehouse(id_: int):
     order = Order.objects.get(pk=id_)
+    print(order)
+    print(order.pk)
     data = {
         "first_name": order.first_name,
         "last_name": order.last_name,
@@ -84,19 +95,16 @@ def add_order_to_warehouse(id_: int):
         "shop_order_id": order.pk,
         "book_items": [
             {
-                "warehouse_book_id": item.book_id,
+                "order_id": item.pk,
+                "book_id": item.book_id,
                 "price": str(item.price),
-                "quantity": item.quantity
+                "quantity": item.quantity,
             } for item in order.items.all()
         ],
     }
+    print(f'Id is {data["shop_order_id"]}')
     requests.post("http://127.0.0.1:8001/create_order/", json=data)
-
-
-
-    # order = serialize("json", order_id)
-    # url = "http://localhost:8001/create_order/"
-    # order_for_api = requests.post(url, json=order)
+    print(data)
 
 
 

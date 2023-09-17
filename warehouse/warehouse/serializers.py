@@ -34,20 +34,6 @@ class BookItemSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["id", "book_id"]
 
 
-# class OrderSerializer(serializers.HyperlinkedModelSerializer):
-#
-#     class Meta:
-#         model = Order
-#         fields = ["id", "first_name", "last_name", "email", "delivery_address", "postal_code", "city",
-#                   "created_on", "updated_on", "status", "payment"]
-
-# class OrderSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Order
-#         fields = ["id", "first_name", "last_name", "email", "delivery_address", "postal_code", "city",
-#                   "created_on", "updated_on", "status", "payment"]
-
-
 class OrderItemSerializer(serializers.Serializer):
     order_id = serializers.IntegerField()
     book_id = serializers.IntegerField()
@@ -56,7 +42,7 @@ class OrderItemSerializer(serializers.Serializer):
 
 
 class OrderSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField()
@@ -67,16 +53,41 @@ class OrderSerializer(serializers.Serializer):
     updated_on = serializers.DateTimeField()
     status = serializers.IntegerField()
     payment = serializers.BooleanField()
+    shop_order_id = serializers.IntegerField()
     book_items = OrderItemSerializer(many=True)
 
 
-# class OrderItemSerializer(serializers.ModelSerializer):
+# data = {
+#     "id": id,
+#     "first_name": "first_name",
+#     "last_name": "last_name",
+#     "email": "email",
+#     "delivery_address": "delivery_address",
+#     "postal_code": "postal_code",
+#     "city": "city",
+#     "created_on": "created_on",
+#     "updated_on": "updated_on",
+#     "payment": "payment",
+#     "status": 0,
+#     "shop_order_id": "id",
+#     "book_items": [
+#         {
+#             "order_id": "item.book_id",
+#             "book_id": "book_id",
+#             "price": "item.price",
+#             "quantity": "item.quantity"}
+#         # } for item in order.items.all()
+#     ],
+# }
 #
-#     class Meta:
-#         model = OrderItem
-#         fields = ["id", "order_id", "book_id", "price", "quantity"]
+# serializer = OrderSerializer(data=data)
+# if serializer.is_valid():
+#     serialized_data = serializer.validated_data
+#     print(serialized_data)
 #
-#
+# print(serializer.errors)
+
+
 class OrderItemBookItemSerializer(serializers.ModelSerializer):
 
     class Meta:
