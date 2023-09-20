@@ -16,7 +16,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static "media/static/css/main.css" %}">
     {% block extra_js %}
-        <script src="{% static "js/scripts.js" %}"></script>
+        <script src="{% static "media/static/js/js/contact_us.js" %}"></script>
         <script src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>
         <script src="{% static 'js/add_to_cart.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/scripts.js' %}"></script>
@@ -30,6 +30,16 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <button type="button" class="btn btn-outline-light js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:contact" %}">Contact Us</button>
+                <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-inline my-2 my-lg-0" id="block1">
                     <a href="{% url "Cart:cart_detail" %}">
                         <img  id="cart-icon" src="{% static "media/static/images/cart.png" %}">

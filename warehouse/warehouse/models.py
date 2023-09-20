@@ -61,8 +61,8 @@ class Book(models.Model):
         return reverse('shop:book-detail', args=[self.id, self.slug])
 
 
-class BookItem(models.Model):
-    book_id = models.ForeignKey(Book, related_name='books', on_delete=models.CASCADE)
+# class BookItem(models.Model):
+#     book_id = models.ForeignKey(Book, related_name='books', on_delete=models.CASCADE)
 
 
 class Order(models.Model):
@@ -103,8 +103,8 @@ class OrderItem(models.Model):
         return self.price * self.quantity
 
 
-class OrderItemBookItem(models.Model):
-    order_item_id = models.ForeignKey(OrderItem, related_name='order_items', on_delete=models.CASCADE)
-    book_item_id = models.ForeignKey(BookItem, related_name='book_items', on_delete=models.CASCADE)
+# class OrderItemBookItem(models.Model):
+#     order_item_id = models.ForeignKey(OrderItem, related_name='order_items', on_delete=models.CASCADE)
+#     book_item_id = models.ForeignKey(BookItem, related_name='book_items', on_delete=models.CASCADE)
 
 

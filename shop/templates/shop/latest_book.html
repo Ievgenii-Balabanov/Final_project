@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +11,7 @@
 <body>
 {% block content %}
     <fieldset>
-        <h1>Bookshelf</h1>
+        <h1>New Arrivals</h1>
     </fieldset>
     {% if object_list %}
         <div class="row" style="margin-right: -39px">
@@ -41,7 +40,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>No books are available</p>
+        <p><h4>New books will be soon...</h4></p>
     {% endif %}
 {% endblock content %}
 

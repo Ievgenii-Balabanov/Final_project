@@ -2,8 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import Book, BookItem, Category, Genre, Order, OrderItem, OrderItemBookItem
-
+from .models import Book, Category, Genre, Order, OrderItem
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
@@ -27,11 +26,11 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
                   "created", "uploaded"]
 
 
-class BookItemSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = BookItem
-        fields = ["id", "book_id"]
+# class BookItemSerializer(serializers.HyperlinkedModelSerializer):
+#
+#     class Meta:
+#         model = BookItem
+#         fields = ["id", "book_id"]
 
 
 class OrderItemSerializer(serializers.Serializer):
@@ -88,9 +87,9 @@ class OrderSerializer(serializers.Serializer):
 # print(serializer.errors)
 
 
-class OrderItemBookItemSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OrderItemBookItem
-        fields = ["id", "order_item_id", "book_item_id"]
+# class OrderItemBookItemSerializer(serializers.ModelSerializer):
+#
+#     class Meta:
+#         model = OrderItemBookItem
+#         fields = ["id", "order_item_id", "book_item_id"]
 

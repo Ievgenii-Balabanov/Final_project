@@ -41,8 +41,6 @@ def add_new_category():
 
 @shared_task
 def add_new_books():
-    books = Product.objects.all()
-    books.delete()
     warehouse = "http://127.0.0.1:8001/json_dumpdata"
     json_result = requests.get(warehouse).json()
     for item in json_result[0]:
@@ -57,17 +55,31 @@ def add_new_books():
         created = item['created']
         uploaded = item['uploaded']
         id_in_warehouse = item['id']
+
+        ids = []
+        for element in json_result[0]:
+            ids.append(element['id'])
+        queryset = Product.objects.filter(id_in_warehouse__in=ids)
+        for book in queryset:
+            book.available = item["available"]
+            # Product.objects.all().update(available=available)
+            book.save()
+
         if not Product.objects.filter(id_in_warehouse=id_in_warehouse).exists():
-            if available:
-                new = Product.objects.create(category=category, name=name, author=author, slug=slug, image=image,
-                                             description=description, price=price, available=available,
-                                             created=created, uploaded=uploaded, id_in_warehouse=id_in_warehouse)
-                new.genre.add(Genre.objects.get(id=item['genre']))
+            new = Product.objects.create(category=category, name=name, author=author, slug=slug, image=image,
+                                         description=description, price=price, available=available,
+                                         created=created, uploaded=uploaded, id_in_warehouse=id_in_warehouse)
+            new.genre.add(Genre.objects.get(id=item['genre']))
 
 
 @shared_task
 def send_email(subject, message, from_email):
     send_mail(subject, message, settings.NOREPLY_EMAIL, [from_email])
+
+
+@shared_task
+def contact_us_email(subject, message, email):
+    send_mail(subject, message, settings.NOREPLY_EMAIL, [email])
 
 
 @shared_task
@@ -84,7 +96,8 @@ def add_order_to_warehouse(id_: int):
         "city": order.city,
         "created_on": str(order.created_on),
         "updated_on": str(order.updated_on),
-        "payment": order.payment,
+        # "payment": order.payment,
+        "payment": 0,
         "status": 0,
         "shop_order_id": order.pk,
         "book_items": [

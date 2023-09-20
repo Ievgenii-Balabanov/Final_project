@@ -1,8 +1,6 @@
 from django.urls import path
 
-from core import settings
 from . import views
-from .views import logout
 
 app_name = 'shop'
 
@@ -14,9 +12,11 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
 
     path("book/", views.BookListView.as_view(), name="book-list"),
+    path("latest_book/", views.LatestBookListView.as_view(), name="latest-book-list"),
+    # path("latest_book/", views.latest_book, name="latest-book-list"),
     path("book/<int:pk>/<slug:slug>/", views.BookInstanceDetailView.as_view(), name="book-detail"),
     path("filter/", views.FilterBookByGenre.as_view(), name="genre-filter"),
 
     path("create/", views.order_create, name='order-create'),
-    path("warehouse_new_order/", views.warehouse_new_order, name="warehouse_new_order"),
+    path("contact/", views.contact, name="contact"),
 ]

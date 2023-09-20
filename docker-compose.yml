@@ -1,49 +1,182 @@
-version: "3.10"
+version: "3.11"
 
 services:
 
-  web:
+  shop:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: moonaudioproduction/shop:latest
-    container_name: shop_final
-#    command: bash docker/runserver.sh
+      dockerfile: docker/shop/Dockerfile
+#      dockerfile: ./docker/shop/Dockerfile
+    image: shop:0.0.1-dev
+    container_name: shop
+    command: bash docker/runserver.sh
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=shop_db
       - DB_PORT=5432
 #    env_file:
-#      - .env
+#      - config/nginx/conf.d/dev.conf
     depends_on:
-      - database
-    ports:
-      - '8888:5000'
-#
-  database:
-    container_name: postgres
-    image: postgres:15-alpine
+      - shop_db
+    expose:
+      - 8000
+    networks:
+      - shop_db_network
+      - nginx_network
+    volumes:
+      - ./shop:/home/appuser/app
+
+  warehouse:
+    build:
+      context: .
+      dockerfile: docker/warehouse/Dockerfile
+    image: warehouse:0.0.1-dev
+    container_name: warehouse
+    command: bash docker/runserver.sh
     environment:
-      - POSTGRES_DB=db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - DB_HOST=warehouse_db
+      - DB_PORT=5432
+#    env_file:
+#      - config/nginx/conf.d/dev.conf
+    depends_on:
+      - warehouse_db
+    expose:
+      - 8001
+    networks:
+      - warehouse_db_network
+      - nginx_network
+    volumes:
+      - ./warehouse:/home/appuser/app
+
+  shop_db:
+    container_name: shop_db
+    image: postgis/postgis:12-master
+    restart: on-failure
+#    volumes:
+#      - db-data:/var/lib/postgresql/data
+    networks:
+      - shop_db_network
     expose:
       - 5432
-    ports:
-      - "5433:5432"
+#    env_file: ./config/.env
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'dev_db'
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  redis_db:
+  warehouse_db:
+    container_name: warehouse_db
+    image: postgis/postgis:12-master
+    restart: on-failure
+#    volumes:
+#      - db-data:/var/lib/postgresql/data
+    networks:
+      - warehouse_db_network
+    expose:
+      - 5432
+#    env_file: ./config/.env
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'dev_db'
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+#      dockerfile: ./docker/nginx/Dockerfile
+      dockerfile: docker/nginx/Dockerfile
+    restart: on-failure
+    networks:
+      - nginx_network
+    ports:
+      - 80:80
+#    depends_on:
+#      - web
+    healthcheck:
+      test: [ "CMD-SHELL", "ps ax", "|" ,"grep -v grep", "|" ,"grep nginx",  "||", "exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  flower:
+    image: mher/flower:0.9.5
+    container_name: flower
+    networks:
+      - nginx_network
+    expose:
+      - 5555
+    depends_on:
+#      - celery
+      - redis
+#      - db
+    command: [ "--app core", "--port=5555", "--url_prefix=flower", "--broker=amqp://rabbitmq:5672", "--broker_api=amqp://rabbitmq:15672//" ]
+
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    command: [ "-smtp-bind-addr", "0.0.0.0:25" ]
+    user: root
+    restart: on-failure
+    networks:
+      - nginx_network
+    expose:
+      - 25
+      - 8025
+    healthcheck:
+      test: [ "CMD", "echo", "|", "telnet", "127.0.0.1 25" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
     container_name: redis_final
-    image: redis:latest
+    image: redis:5.0.6-alpine
     restart: on-failure
     expose:
       - 6379
-    ports:
-      - "6379:6379"
 #    volumes:
-#      - redis-data:/var/lib/redis/data
-#    healthcheck:
-#      test: [ "CMD", "redis-cli", "-h", "localhost", "ping" ]
+#      - redis:/var/lib/redis/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "ping"]
 
-#volumes:
-#  database-data:
-#  redis-data:
+
+  rabbitmq:
+    container_name: rabbitmq_final
+    image: rabbitmq:3.8.0-alpine
+    restart: on-failure
+#    networks:
+#      - webnet
+    expose:
+      - 4369
+      - 5671
+      - 5672
+      - 15672
+      - 25672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5672"]
+      interval: 5s
+      timeout: 15s
+      retries: 1
+
+networks:
+  shop_db_network:
+  warehouse_db_network:
+  nginx_network:
+
+volumes:
+  shop-db-data:
+  warehouse-db-data:
+  rabbitmq_data:

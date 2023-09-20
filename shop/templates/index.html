@@ -31,44 +31,37 @@
             </div>
 
             <div class="carousel-inner">
-                <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-                    <div class="container">
-                        <div class="carousel-caption text-start">
-                            <h1>Example headline.</h1>
-                            <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
-                            <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-                    <div class="container">
-                        <div class="carousel-caption">
-                            <h1>Another example headline.</h1>
-                            <p>Some representative placeholder content for the second slide of the carousel.</p>
-                            <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
-                        </div>
-                    </div>
+                <div class="carousel-item active">
+                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                        <a href="http://127.0.0.1:8000/filter/?genre=5">
+                            <image width="100%" height="100%" xlink:href="{% static "media/static/images/new_books.jpeg" %}" />
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
+                        </a>
+                    </svg>
                 </div>
 
                 <div class="carousel-item active">
                     <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-{#                        <image href="{% static "images/placeholder.png" %}" width="100%" height="100%"></image>#}
-{#                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">#}
+                        <a href="http://127.0.0.1:8000/filter/?genre=5">
+                            <image width="100%" height="100%" xlink:href="{% static "media/static/images/best_sci.webp" %}" />
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
+                        </a>
+                    </svg>
+                </div>
+
+                <div class="carousel-item active">
+                    <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
                         <title>Placeholder</title>
-{#                        <rect width="100%" height="100%" fill="#55595c"></rect>#}
-                        <image width="100%" height="125%" xlink:href="{% static "media/static/images/bookshelf.webp" %}" />
+                        <image width="100%" height="100%" xlink:href="{% static "media/static/images/bookshelf.webp" %}" />
                         <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
                     </svg>
                     <div class="container">
                         <div style="color: white" class="carousel-caption text-end">
                             <h1 id="carousel">"Books are a uniquely portable magic"</h1>
                             <h3 id="carousel">Stephen King</h3>
-                                </text>
-{#                            <p><a class="btn btn-lg btn-primary" href="{% url "shop:book-list" %}">View Bookshelf</a></p>#}
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Book, BookItem, Category, Genre, Order, OrderItem, OrderItemBookItem
+from .models import Book, Category, Genre, Order, OrderItem
 
 
 class OrderItemInline(admin.TabularInline):
@@ -20,6 +20,10 @@ class GenreAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
+class BookAdmin(admin.ModelAdmin):
+    list_display = ["name", "available"]
+
+
 class BookItemAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
@@ -29,10 +33,10 @@ class OrderItemBookItemAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category)
-admin.site.register(Book)
-admin.site.register(BookItem)
+admin.site.register(Book, BookAdmin)
+# admin.site.register(BookItem, BookItemAdmin)
 admin.site.register(Order)
 admin.site.register(OrderItem)
-admin.site.register(OrderItemBookItem)
+# admin.site.register(OrderItemBookItem)
 admin.site.register(Genre)
 

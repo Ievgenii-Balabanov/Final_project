@@ -1,18 +1,19 @@
-import requests
-import json
+import datetime
+from datetime import date
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import generic
 from django.views.generic import ListView
 
 from Cart.cart import Cart
-from .forms import ParForm, RegisterForm
+from .forms import ParForm, RegisterForm, ContactUsForm
 from .models import Category, Genre, Order, OrderItem, Product
-from shop.tasks import add_order_to_warehouse
+from shop.tasks import add_order_to_warehouse, contact_us_email
 
 
 def index(request):
@@ -61,6 +62,13 @@ class BookListView(BookGenre, generic.ListView):
     paginate_by = 8
 
 
+class LatestBookListView(BookGenre, generic.ListView):
+    model = Product
+    template_name = "shop/latest_book.html"
+    queryset = Product.objects.filter(created__gte=timezone.now() - datetime.timedelta(minutes=5))
+    paginate_by = 4
+
+
 class BookInstanceDetailView(generic.DetailView):
     model = Product
     template_name = "shop/book_detail.html"
@@ -105,6 +113,11 @@ def order_create(request):
 
             add_order_to_warehouse.apply_async(args=[order.pk])
             print(order.pk)
+
+            book = Product.objects.get(pk=order_item.book_id)
+            book.available = False
+            book.save()
+
             cart.clear()
             return render(request, 'shop/orders/order/created.html',
                           {'order': order})
@@ -126,11 +139,29 @@ class FilterBookByGenre(BookGenre, ListView):
         return queryset
 
 
-def warehouse_new_order(request):
-    orders = Order.objects.all().values("id", "first_name", "last_name", "email", "delivery_address", "postal_code",
-                                        "city", "created_on", "updated_on", "payment")
-    order_items = OrderItem.objects.all().values("id", "order", "book", "price", "quantity")
+def contact_us(request, form, template_name):
+    data = dict()
+    if request.POST:
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            contact_us_email.apply_async(
+                [
+                    form.cleaned_data.get("subject"),
+                    form.cleaned_data.get("message"),
+                    form.cleaned_data["from_email"],
+                ]
+            )
+            data["form_is_valid"] = True
+        else:
+            data["form_is_valid"] = False
+    context = {"form": form}
+    data["html_form"] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
 
-    order_list = list(orders)
-    order_items_list = list(order_items)
-    return JsonResponse([order_list, order_items_list], safe=False)
+
+def contact(request):
+    if request.POST:
+        form = ContactUsForm(request.POST)
+    else:
+        form = ContactUsForm()
+    return contact_us(request, form, "include/contact_us_form.html")
