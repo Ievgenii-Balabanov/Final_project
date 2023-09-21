@@ -60,11 +60,6 @@ def add_new_books():
 
 
 @shared_task
-def send_email(subject, message, from_email):
-    send_mail(subject, message, settings.NOREPLY_EMAIL, [from_email])
-
-
-@shared_task
 def contact_us_email(subject, message, email):
     send_mail(subject, message, settings.NOREPLY_EMAIL, [email])
 

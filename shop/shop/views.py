@@ -1,5 +1,4 @@
 import datetime
-from datetime import date
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
@@ -12,7 +11,7 @@ from django.views.generic import ListView
 
 from Cart.cart import Cart
 from .forms import ParForm, RegisterForm, ContactUsForm
-from .models import Category, Genre, Order, OrderItem, Product
+from .models import Genre, Order, OrderItem, Product
 from shop.tasks import add_order_to_warehouse, contact_us_email
 
 
