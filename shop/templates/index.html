@@ -4,26 +4,8 @@
 {% load cache %}
 
 {% block content %}
-    <div class="container py-3">
-            <header>
-                <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
-                    <a href="/" class="d-flex align-items-center link-body-emphasis text-decoration-none">
-                        <img style="padding: 10px;" width="16%" src="{% static "media/static/images/Profile Icon.png" %}" alt="icon">
-                        <span class="fs-4"> MoonAudioProduction Book shop</span>
-                    </a>
-
-                    <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-                        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Features</a>
-                        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Enterprise</a>
-                        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Support</a>
-                        <a class="py-2 link-body-emphasis text-decoration-none" href="#">Pricing</a>
-                    </nav>
-                </div>
-            </header>
-        </div>
     <main>
-
-        <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+        <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" style="margin-top: 10px">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
@@ -34,7 +16,7 @@
                 <div class="carousel-item active">
                     <svg class="bd-placeholder-img" width="100%" height="400px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                        <a href="http://127.0.0.1:8000/filter/?genre=5">
+                        <a href="http://127.0.0.1:8000/latest_book/">
                             <image width="100%" height="100%" xlink:href="{% static "media/static/images/new_books.jpeg" %}" />
                             <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
                         </a>
@@ -58,10 +40,11 @@
                         <image width="100%" height="100%" xlink:href="{% static "media/static/images/bookshelf.webp" %}" />
                         <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
                     </svg>
+
                     <div class="container">
                         <div style="color: white" class="carousel-caption text-end">
-                            <h1 id="carousel">"Books are a uniquely portable magic"</h1>
-                            <h3 id="carousel">Stephen King</h3>
+                            <h1 id="carousel" style="font-family: Roca,serif;">"Books are a uniquely portable magic"</h1>
+                            <h3 id="carousel" style="font-family: Roca,serif;">Stephen King</h3>
                         </div>
                     </div>
                 </div>
@@ -78,79 +61,136 @@
             </button>
         </div>
 
-
-  <!-- Marketing messaging and featurettes
-  ================================================== -->
-  <!-- Wrap the rest of the page in another container to center all the content. -->
+        <div style="margin-top: 10px" class="container py-3">
+            <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-top border-bottom">
+                <span class="fs-4" style="font-family: Roca,serif; color: #005748;">
+                    <h1>Browse Books by Genre</h1>
+                </span>
+            </div>
+        </div>
 
         <div class="container marketing">
             <div class="row">
-                <div class="col-lg-4">
-                    <img class="bd-placeholder-img rounded-circle" src="{% static "media/static/images/book1.jpg" %}" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
-                    <h2 class="fw-normal">Bookshelf</h2>
-                    <p>Fill your bookshelves with used books, the latest bestsellers, collectible books and forgotten out-of-print titles from years gone by.</p>
-                    <p><a class="btn btn-secondary" href="{% url "shop:book-list" %}">View details »</a></p>
-                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=5">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/frankenstein.jpg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg"   role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                        </img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Sci-Fi</h2>
+                </div>
 
-                <div class="col-lg-4">
-                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-                    <h2 class="fw-normal">Pidor</h2>
-                    <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
-                    <p><a class="btn btn-secondary" href="#">View details »</a></p>
-                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=2">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/poppins.jpg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Fantasy</h2>
+                </div>
 
-                <div class="col-lg-4">
-                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-                    <h2 class="fw-normal">Padla</h2>
-                    <p>And lastly this, the third column of representative placeholder content.</p>
-                    <p><a class="btn btn-secondary" href="#">View details »</a></p>
-                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=3">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/it.jpg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg"   role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Horror</h2>
+                </div>
+
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=1">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/godfather.jpg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg"   role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Crime</h2>
+                </div>
+
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=6">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/i_am_zlatan.jpg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg"   role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Biographies</h2>
+                </div>
+
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=7">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/lambs.jpg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg"   role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Detective</h2>
+                </div>
+
+                <div class="col-lg-4" style="width: 175px">
+                    <a href="http://127.0.0.1:8000/filter/?genre=4">
+                        <img class="bd-placeholder-img rounded-circle" src="{% static "media/jane_eyer.jpeg" %}" width="150" height="150" xmlns="http://www.w3.org/2000/svg"   role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></img>
+                    </a>
+                    <p>
+                    <h2 style="text-align: center; font-family: Roca,serif;" class="fw-normal">Romance</h2>
+                </div>
             </div><!-- /.row -->
 
             <hr class="featurette-divider">
             <div class="row featurette">
+            <p>
                 <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-body-secondary">It’ll blow your mind.</span></h2>
-                    <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.</p>
+                    <h2 style="margin-bottom: 7px; font-family: Roca,serif;" class="featurette-heading fw-normal lh-1">"A reader lives a thousand lives before he dies, said Jojen. The man who never reads lives only one"</h2>
+                            <h5 style="font-family: Roca"><span class="text-secondary">"A mind needs books as a sword needs a whetstone, if it is to keep its edge"</span></h5>
+                    <br>
+                    <h5 style="text-align: right; font-family: Roca">― George R.R. Martin</h5>
                 </div>
                 <div class="col-md-5">
-                    <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg>
+                    <svg class="bd-placeholder-img" width="100%" height="280px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                            <image width="100%" height="100%" xlink:href="{% static "media/reading.webp" %}" />
+                        </a>
+                    </svg>
                 </div>
+                <p>
             </div>
 
             <hr class="featurette-divider">
             <div class="row featurette">
+                <p>
                 <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-body-secondary">See for yourself.</span></h2>
-                    <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
+                    <h2 style="margin-bottom: 7px; font-family: Roca,serif;" class="featurette-heading fw-normal lh-1">"The ability to read awoke inside of me some long dormant craving to be mentally alive."</h2>
+                    <br>
+                    <h5 style="text-align: right; font-family: Roca">― Malcolm X</h5>
                 </div>
 
                 <div class="col-md-5 order-md-1">
-                    <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg>
+                    <svg class="bd-placeholder-img" width="100%" height="333px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                            <image width="100%" height="100%" xlink:href="{% static "media/malcom.jpeg" %}" />
+                        </a>
+                    </svg>
+                    <p>
                 </div>
             </div>
+            <p>
 
             <hr class="featurette-divider">
             <div class="row featurette">
+                <p>
                 <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. <span class="text-body-secondary">Checkmate.</span></h2>
-                    <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content.</p>
+                    <h2 style="margin-bottom: 7px; font-family: Roca,serif;" class="featurette-heading fw-normal lh-1">"Books are the perfect entertainment: no commercials, no batteries, hours of enjoyment for each dollar spent."</h2>
+                    <h5 style="font-family: Roca"><span class="text-secondary">"What I wonder is why everybody doesn't carry a book around for those inevitable dead spots in life."</span></h5>
+                    <br>
+                    <h5 style="text-align: right; font-family: Roca">― Stephen King</h5>
                 </div>
-
                 <div class="col-md-5">
-                    <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect><text x="50%" y="50%" fill="var(--bs-secondary-color)" dy=".3em">500x500</text></svg>
+                    <svg class="bd-placeholder-img" width="76%" height="273px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                            <image width="100%" height="100%" xlink:href="{% static "media/b.jpeg" %}" />
+                        </a>
+                    </svg>
                 </div>
+            <p>
             </div>
 
             <hr class="featurette-divider">
         </div><!-- /.container -->
     </main>
-    {# --- #}
-
-
-
-
-
-
 
 {% endblock content %}

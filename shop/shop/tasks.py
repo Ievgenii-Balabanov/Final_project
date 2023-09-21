@@ -4,8 +4,6 @@ from django.conf import settings
 
 from celery import shared_task
 from django.core.mail import send_mail
-from django.core.serializers import serialize
-from django.http import JsonResponse, HttpResponse
 
 from shop.models import Category, Genre, Product, Order
 
@@ -14,8 +12,6 @@ django.setup()
 
 @shared_task
 def add_new_genre():
-    books = Genre.objects.all()
-    books.delete()
     warehouse = "http://127.0.0.1:8001/json_dumpdata"
     json_result = requests.get(warehouse).json()
     for item in json_result[2]:
@@ -27,8 +23,6 @@ def add_new_genre():
 
 @shared_task
 def add_new_category():
-    books = Category.objects.all()
-    books.delete()
     warehouse = "http://127.0.0.1:8001/json_dumpdata"
     json_result = requests.get(warehouse).json()
     for item in json_result[1]:
@@ -56,16 +50,9 @@ def add_new_books():
         uploaded = item['uploaded']
         id_in_warehouse = item['id']
 
-        ids = []
-        for element in json_result[0]:
-            ids.append(element['id'])
-        queryset = Product.objects.filter(id_in_warehouse__in=ids)
-        for book in queryset:
-            book.available = item["available"]
-            # Product.objects.all().update(available=available)
-            book.save()
-
-        if not Product.objects.filter(id_in_warehouse=id_in_warehouse).exists():
+        if Product.objects.filter(id_in_warehouse=id_in_warehouse).exists():
+            Product.objects.filter(id_in_warehouse=id_in_warehouse).update(available=available)
+        else:
             new = Product.objects.create(category=category, name=name, author=author, slug=slug, image=image,
                                          description=description, price=price, available=available,
                                          created=created, uploaded=uploaded, id_in_warehouse=id_in_warehouse)
@@ -96,7 +83,6 @@ def add_order_to_warehouse(id_: int):
         "city": order.city,
         "created_on": str(order.created_on),
         "updated_on": str(order.updated_on),
-        # "payment": order.payment,
         "payment": 0,
         "status": 0,
         "shop_order_id": order.pk,

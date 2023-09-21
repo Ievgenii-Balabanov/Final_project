@@ -1,4 +1,4 @@
-<form method="post" action="{% url 'blog:contact' %}" class="js-contact-form">
+<form method="post" action="{% url 'shop:contact' %}" class="js-contact-form">
   {% csrf_token %}
   <div class="modal-header">
     <h1 class="modal-title">Contact Us</h1>
@@ -7,7 +7,7 @@
     </button>
   </div>
   <div class="modal-body">
-    {% include 'blog/includes/partial_contact_us_form.html' %}
+    {% include 'include/partial_contact_us_form.html' %}
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>

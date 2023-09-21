@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
@@ -23,98 +23,83 @@
     {% endblock extra_js%}
 
 </head>
-    <body>
-        <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url "shop:index" %}"><img width="66%" src="{% static "media/static/images/Profile Icon.png" %}" alt="icon"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <body style="width: 100%; height: auto; padding: 0; margin: 0;">
+        <div class="wrapper" style="min-height: 100%; display: flex; flex-direction: column">
+            <nav class="navbar navbar-expand navbar-dark bg-dark" aria-label="Second navbar example">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url "shop:index" %}"><img width="13%" src="{% static "media/static/images/Profile Icon.png" %}" alt="icon">
+                        <span class="fs-4"> MoonAudioProduction Book shop</span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <button type="button" class="btn btn-outline-light js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:contact" %}">Contact Us</button>
-                <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
+                    <button style="margin-right: 300px" type="button" class="btn btn-outline-light js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "shop:contact" %}">Contact Us</button>
+                    <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
 
+                            </div>
                         </div>
                     </div>
+
+                    <div class="form-inline my-2 my-lg-0" id="block1">
+                        <a href="{% url "Cart:cart_detail" %}">
+                            <img  id="cart-icon" src="{% static "media/static/images/cart.png" %}">
+                        </a>
+                    </div>
                 </div>
+            </nav>
 
-                <div class="form-inline my-2 my-lg-0" id="block1">
-                    <a href="{% url "Cart:cart_detail" %}">
-                        <img  id="cart-icon" src="{% static "media/static/images/cart.png" %}">
-                    </a>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container-fluid">
-            <div class="row">
-            {% include 'include/sidebar.html' %}
-                <div class="col-sm-10 ">
-                    {% block content %}{% endblock %}
-                    {% block pagination %}
-{#                        {% if is_paginated %}#}
-{#                            <div class="pagination">#}
-{#                                <span class="page-links">#}
-{#                                    {% if page_obj.has_previous %}#}
-{#                                        <a href="?page=1">&laquo; First</a>#}
-{#                                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>#}
-{#                                    {% endif %}#}
-{#                                    <span class="page-current">#}
-{#                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.#}
-{#                                    </span>#}
-{#                                    {% if page_obj.has_next %}#}
-{#                                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>#}
-{#                                        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>#}
-{#                                    {% endif %}#}
-{#                                </span>#}
-{#                            </div>#}
-{#                        {% endif %}#}
-
-
-
-                        {% if is_paginated %}
-                            <nav aria-label="...">
-                                <ul class="pagination">
-                                    {% if page_obj.has_previous %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+{#            <div class="container-fluid" style="flex: 1 1 auto">#}
+            <div class="container-fluid" style="min-height: 70vh;">
+                <div class="row">
+                {% include 'include/sidebar.html' %}
+                    <div class="col-sm-10 ">
+                        {% block content %}{% endblock %}
+                        {% block pagination %}
+                            <br>
+                            {% if is_paginated %}
+                                <nav aria-label="...">
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                                            </li>
+                                        {% endif %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#"><strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong></a>
+    {#                                        <h5>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</h5>#}
                                         </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
-                                        </li>
-                                    {% endif %}
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#"><strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong></a>
-{#                                        <h5>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</h5>#}
-                                    </li>
-                                    {% if page_obj.has_next %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
-                        {% endif %}
-                    {% endblock %}
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+                        {% endblock %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <footer class="py-3 my-4">
-                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
-                </ul>
-                <p class="text-center text-body-secondary">© 2023 Company, Inc</p>
-            </footer>
+            <div class="container" style="padding-bottom: 1px">
+                <footer class="py-3 my-4" style="position: static">
+                    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+                    </ul>
+                    <p class="text-center text-body-secondary">© 2023 Company, Inc</p>
+                </footer>
+            </div>
         </div>
     </body>
 </html>

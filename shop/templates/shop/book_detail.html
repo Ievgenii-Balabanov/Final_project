@@ -22,20 +22,11 @@
                         <li><strong>Category: </strong>{{ book.category }}</li>
                     </ul>
 
-                    <form method="post" action="{% url 'Cart:cart_add' book.pk %}">
+                    <form style="position: static" method="post" action="{% url 'Cart:cart_add' book.pk %}">
                         {% csrf_token %}
                         {{ part_form.quantity|add_class:'form-control' }}
                         <button style="margin-top: 10px" class="w-100 btn btn-lg btn-outline-primary" type="submit">Add to Cart</button>
                     </form>
-
-{#                    <button type="button" class="w-100 btn btn-lg btn-outline-primary js-contact-us" data-bs-toggle="modal" data-bs-target="#modal-contact-us" data-bs-whatever="@getbootstrap" data-url="{% url "Cart:cart_detail" %}">Add to Cart</button>#}
-                    <div class="modal fade" id="modal-contact-us" tabindex="-1" aria-labelledby="contact_us" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

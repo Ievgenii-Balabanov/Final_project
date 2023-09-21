@@ -58,7 +58,7 @@ class BookGenre:
 class BookListView(BookGenre, generic.ListView):
     model = Product
     template_name = "shop/book_list.html"
-    queryset = Product.objects.all()  # -> Product is a shop model
+    queryset = Product.objects.filter(available=True)  # -> Product is a shop model
     paginate_by = 8
 
 
@@ -66,7 +66,7 @@ class LatestBookListView(BookGenre, generic.ListView):
     model = Product
     template_name = "shop/latest_book.html"
     queryset = Product.objects.filter(created__gte=timezone.now() - datetime.timedelta(minutes=5))
-    paginate_by = 4
+    paginate_by = 8
 
 
 class BookInstanceDetailView(generic.DetailView):
