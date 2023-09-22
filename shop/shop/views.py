@@ -1,5 +1,5 @@
 import datetime
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -10,7 +10,7 @@ from django.views import generic
 from django.views.generic import ListView
 
 from Cart.cart import Cart
-from .forms import ParForm, RegisterForm, ContactUsForm
+from .forms import ParForm, RegisterForm, ContactUsForm, UserAuthenticationForm
 from .models import Genre, Order, OrderItem, Product
 from shop.tasks import add_order_to_warehouse, contact_us_email
 
@@ -35,6 +35,7 @@ class RegisterFormView(generic.FormView):
 
 class LoginFormView(LoginView):
     redirect_authenticated_user = True
+    form_class = UserAuthenticationForm
 
     def get_success_url(self):
         return reverse_lazy('shop:index')

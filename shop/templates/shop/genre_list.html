@@ -17,26 +17,28 @@
         <div class="row">
             {% if object_list %}
                 {% for book in object_list %}
-                    <div class="col-lg-3 d-flex align-items-stretch">
-                        <div class="box-element product" style="position: relative; width: 300px; height: 710px; margin-top: 20px;">
-                            <div class="card mb-4 rounded-2 shadow-sm">
-                                <div class="card-header py-3">
-                                    <h2 align="center">{{ book.name }} </h2>
-                                </div>
+                    {% if book.available == True %}
+                        <div class="col-lg-3 d-flex align-items-stretch">
+                            <div class="box-element product" style="position: relative; width: 300px; height: 710px; margin-top: 20px;">
+                                <div class="card mb-4 rounded-2 shadow-sm">
+                                    <div class="card-header py-3">
+                                        <h2 align="center">{{ book.name }} </h2>
+                                    </div>
 
-                                <div class="card-body d-flex" style="min-height: 450px;">
-                                    <ul class="list-unstyled mt-3 mb-4" >
-                                        <img width="100%" align="center" src="{{ book.image.url }}" alt="">
-                                    </ul>
+                                    <div class="card-body d-flex" style="min-height: 450px;">
+                                        <ul class="list-unstyled mt-3 mb-4" >
+                                            <img width="100%" align="center" src="{{ book.image.url }}" alt="">
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                                <h1 class="card-title pricing-card-title" style="bottom: 30px">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
+                                    <h1 class="card-title pricing-card-title" style="bottom: 30px">${{ book.price }}<small class="text-body-secondary fw-light"></small></h1>
 
-                            <div style="position: absolute; bottom: 0px; width: 270px; padding-bottom: 10px">
-                                <a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
+                                <div style="position: absolute; bottom: 0px; width: 270px; padding-bottom: 10px">
+                                    <a class="w-100 btn btn-lg btn-success" href="{% url "shop:book-detail" book.pk book.slug %}">View</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             {% else %}
                 <h3 style="font-family: Roca">Oops... Looks like we don't have any books matching your search parameters &#9785;</h3>

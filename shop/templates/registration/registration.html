@@ -1,14 +1,34 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block title %}Sign Up{% endblock %}
 {% block content %}
 
-  <form method="POST" class="form-group">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-    </table>
-      <button type="submit" class="btn btn-success">Register</button>
-      <button type="reset" class="btn btn-info">Reset</button>
-  </form>
+    <div class="card text-bg-light mb-3" style="width: 22rem; height: 550px; margin-top: 50px">
+        <div style="text-align: center; height: 60px" class="card-header"><h2>Sign Up</h2></div>
+            <div class="card-body">
+                <form style="position: initial"  method="POST" >
+                {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    {% for field in form.visible_fields %}
+                        <div class="form-group"><p></p>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field|add_class:'form-control' }}
+                            {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <p></p>
+                    <div class="form-group">
+                        <button type="submit" style="width: 120px; border-radius: 7px" class="btn btn-outline-success btn-lg">Register</button>
+                    </div>
+                </form>
+            </div>
+    </div>
+
+
 
 {% endblock %}

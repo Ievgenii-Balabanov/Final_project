@@ -18,17 +18,19 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from shop import views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("cart/", include('Cart.urls', namespace='Cart')),
     path("", include('shop.urls', namespace='shop')),
 ]
-
-urlpatterns += [
-    # path("accounts/", include("django.contrib.auth.urls")),
-    # path("accounts/profile/", views.UserProfile.as_view(), name="profile"),
-    # path("accounts/update_profile/", views.UpdateProfileView.as_view(), name="update_profile"),
-]
+#
+# urlpatterns += [
+#     path("accounts/", include("django.contrib.auth.urls")),
+#     # path("accounts/profile/", views.UserProfile.as_view(), name="profile"),
+#     # path("accounts/update_profile/", views.UpdateProfileView.as_view(), name="update_profile"),
+# ]
 
 urlpatterns += (
         static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # noqa: W503
